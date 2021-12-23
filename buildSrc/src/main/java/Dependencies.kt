@@ -25,7 +25,8 @@ object AndroidLibs {
         "com.google.accompanist:accompanist-insets:${AndroidPluginVersions.googleAccompanist}",
         "com.google.accompanist:accompanist-insets-ui:${AndroidPluginVersions.googleAccompanist}",
         "com.google.accompanist:accompanist-systemuicontroller:${AndroidPluginVersions.googleAccompanist}",
-        "io.insert-koin:koin-android:${AndroidPluginVersions.koin}"
+        "io.insert-koin:koin-android:${AndroidPluginVersions.koin}",
+        "io.insert-koin:koin-androidx-compose:${AndroidPluginVersions.koin}"
     )
     val androidTestImplementations = listOf(
         "androidx.compose.ui:ui-test-junit4:${AndroidPluginVersions.compose}",
