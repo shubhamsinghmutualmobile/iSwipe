@@ -1,4 +1,4 @@
-package com.mutualmobile.iswipe.android.ui.screens.landing_screen.components
+package com.mutualmobile.iswipe.android.view.screens.landing_screen.components
 
 import androidx.compose.animation.core.Spring
 import androidx.compose.animation.core.animateDp

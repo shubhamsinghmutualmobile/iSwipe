@@ -1,4 +1,4 @@
-package com.mutualmobile.iswipe.android.ui.screens.landing_screen
+package com.mutualmobile.iswipe.android.view.screens.landing_screen
 
 import androidx.annotation.DrawableRes
 import androidx.compose.foundation.Image
@@ -23,9 +23,9 @@ import com.google.accompanist.pager.ExperimentalPagerApi
 import com.google.accompanist.pager.HorizontalPager
 import com.google.accompanist.pager.rememberPagerState
 import com.mutualmobile.iswipe.android.R
-import com.mutualmobile.iswipe.android.ui.screens.landing_screen.components.SpringBoxIndicator
-import com.mutualmobile.iswipe.android.ui.screens.weather_screen.WeatherScreen
-import com.mutualmobile.iswipe.android.ui.screens.youtube_screen.YoutubeScreen
+import com.mutualmobile.iswipe.android.view.screens.landing_screen.components.SpringBoxIndicator
+import com.mutualmobile.iswipe.android.view.screens.weather_screen.WeatherScreen
+import com.mutualmobile.iswipe.android.view.screens.youtube_screen.YoutubeScreen
 import kotlinx.coroutines.launch
 
 enum class TabScreens(@DrawableRes val icon: Int) {

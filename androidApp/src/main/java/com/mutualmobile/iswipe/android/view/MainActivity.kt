@@ -1,6 +1,8 @@
-package com.mutualmobile.iswipe.android.ui
+package com.mutualmobile.iswipe.android.view
 
 import android.os.Bundle
+import android.util.Log
+import android.widget.Toast
 import androidx.activity.compose.setContent
 import androidx.appcompat.app.AppCompatActivity
 import androidx.compose.foundation.layout.Box
@@ -13,14 +15,26 @@ import androidx.compose.ui.graphics.Color
 import androidx.core.view.WindowCompat
 import com.google.accompanist.insets.ProvideWindowInsets
 import com.google.accompanist.systemuicontroller.rememberSystemUiController
-import com.mutualmobile.iswipe.android.ui.screens.landing_screen.LandingScreen
-import com.mutualmobile.iswipe.android.ui.theme.ISwipeTheme
+import com.mutualmobile.iswipe.android.view.screens.landing_screen.LandingScreen
+import com.mutualmobile.iswipe.android.view.theme.ISwipeTheme
+import com.mutualmobile.iswipe.data.network.apis.WeatherAPI
+import kotlinx.coroutines.MainScope
+import kotlinx.coroutines.launch
+import org.koin.android.ext.android.inject
+
+private const val TAG = "MainActivityTAG"
 
 class MainActivity : AppCompatActivity() {
+    private val weatherApi: WeatherAPI by inject()
+
     @OptIn(ExperimentalMaterial3Api::class)
     override fun onCreate(savedInstanceState: Bundle?) {
         WindowCompat.setDecorFitsSystemWindows(window, false)
         super.onCreate(savedInstanceState)
+        MainScope().launch {
+            Toast.makeText(applicationContext, weatherApi.getCurrentWeather().toString(), Toast.LENGTH_SHORT).show()
+            Log.d(TAG, "onCreate: ${weatherApi.getCurrentWeather()}")
+        }
         setContent {
             val systemUiController = rememberSystemUiController()
             val useDarkIcons = androidx.compose.material.MaterialTheme.colors.isLight

@@ -1,4 +1,4 @@
-package com.mutualmobile.iswipe.android.ui.screens.weather_screen
+package com.mutualmobile.iswipe.android.view.screens.weather_screen
 
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize

@@ -21,7 +21,7 @@ android {
         compose = true
     }
     composeOptions {
-        kotlinCompilerExtensionVersion = PluginVersions.compose
+        kotlinCompilerExtensionVersion = AndroidPluginVersions.compose
     }
     tasks.withType<org.jetbrains.kotlin.gradle.tasks.KotlinCompile>().configureEach {
         kotlinOptions.freeCompilerArgs += "-opt-in=kotlin.RequiresOptIn"
@@ -30,6 +30,6 @@ android {
 
 dependencies {
     implementation(project(":shared"))
-    Libs.implementations.forEach(::implementation)
-    Libs.androidTestImplementations.forEach(::androidTestImplementation)
+    AndroidLibs.implementations.forEach(::implementation)
+    AndroidLibs.androidTestImplementations.forEach(::androidTestImplementation)
 }

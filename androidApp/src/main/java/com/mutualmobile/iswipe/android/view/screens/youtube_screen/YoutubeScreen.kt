@@ -1,4 +1,4 @@
-package com.mutualmobile.iswipe.android.ui.screens.youtube_screen
+package com.mutualmobile.iswipe.android.view.screens.youtube_screen
 
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize

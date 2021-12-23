@@ -1,4 +1,4 @@
-package com.mutualmobile.iswipe.android.ui.theme
+package com.mutualmobile.iswipe.android.view.theme
 
 import androidx.compose.material3.Typography
 import androidx.compose.ui.text.TextStyle
