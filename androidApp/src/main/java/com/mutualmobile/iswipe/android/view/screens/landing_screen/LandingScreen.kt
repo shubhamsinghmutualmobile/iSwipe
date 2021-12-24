@@ -16,12 +16,14 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import com.google.accompanist.insets.navigationBarsPadding
 import com.google.accompanist.pager.ExperimentalPagerApi
 import com.google.accompanist.pager.HorizontalPager
 import com.google.accompanist.pager.rememberPagerState
+import com.google.accompanist.systemuicontroller.rememberSystemUiController
 import com.mutualmobile.iswipe.android.R
 import com.mutualmobile.iswipe.android.view.screens.landing_screen.components.BoxIndicator
 import com.mutualmobile.iswipe.android.view.screens.weather_screen.WeatherScreen
@@ -51,6 +53,10 @@ fun LandingScreen() {
     val tabIndex = pagerState.currentPage
     val coroutineScope = rememberCoroutineScope()
 
+    val systemUiController = rememberSystemUiController()
+    val useDarkIcons = androidx.compose.material.MaterialTheme.colors.isLight
+    systemUiController.setNavigationBarColor(color = Color.Transparent, darkIcons = !useDarkIcons)
+
     Scaffold(
         bottomBar = {
             ScrollableTabRow(
@@ -69,7 +75,7 @@ fun LandingScreen() {
                                 pagerState.animateScrollToPage(index)
                             }
                         },
-                        text = { Text(text = screen.name) },
+                        text = { Text(text = screen.name, color = MaterialTheme.colorScheme.inverseOnSurface) },
                         icon = {
                             Image(
                                 painter = painterResource(id = screen.icon),
