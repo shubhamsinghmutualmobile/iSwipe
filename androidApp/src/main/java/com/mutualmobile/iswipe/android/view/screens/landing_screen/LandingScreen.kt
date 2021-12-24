@@ -17,6 +17,7 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import com.google.accompanist.insets.navigationBarsPadding
@@ -30,9 +31,12 @@ import com.mutualmobile.iswipe.android.view.screens.weather_screen.WeatherScreen
 import com.mutualmobile.iswipe.android.view.screens.youtube_screen.YoutubeScreen
 import kotlinx.coroutines.launch
 
-enum class TabScreens(@DrawableRes val icon: Int) {
-    Weather(icon = R.drawable.ic_weather),
-    Youtube(icon = R.drawable.ic_youtube),
+const val WeatherTestTag = "WeatherTag"
+const val YoutubeTestTag = "YoutubeTag"
+
+enum class TabScreens(@DrawableRes val icon: Int, val testTag: String) {
+    Weather(icon = R.drawable.ic_weather, testTag = WeatherTestTag),
+    Youtube(icon = R.drawable.ic_youtube, testTag = YoutubeTestTag),
 }
 
 @Composable
@@ -68,7 +72,9 @@ fun LandingScreen() {
             ) {
                 TabScreens.values().forEachIndexed { index, screen ->
                     Tab(
-                        modifier = Modifier.navigationBarsPadding(),
+                        modifier = Modifier
+                            .navigationBarsPadding()
+                            .testTag(screen.testTag),
                         selected = tabIndex == index,
                         onClick = {
                             coroutineScope.launch {

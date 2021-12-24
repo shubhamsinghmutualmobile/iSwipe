@@ -11,6 +11,7 @@ android {
         targetSdk = 31
         versionCode = 1
         versionName = "1.0"
+        testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
     buildTypes {
         getByName("release") {
@@ -25,6 +26,12 @@ android {
     }
     tasks.withType<org.jetbrains.kotlin.gradle.tasks.KotlinCompile>().configureEach {
         kotlinOptions.freeCompilerArgs += "-opt-in=kotlin.RequiresOptIn"
+    }
+
+    // Because of this error: https://github.com/Kotlin/kotlinx.coroutines/issues/2023
+    packagingOptions {
+        resources.excludes.add("META-INF/AL2.0")
+        resources.excludes.add("META-INF/LGPL2.1")
     }
 }
 
