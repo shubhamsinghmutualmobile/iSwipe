@@ -11,6 +11,7 @@ object AndroidPluginVersions {
     const val ktor = CommonMainPluginVersions.ktor
     const val turbine = "0.7.0"
     const val kotlin = "1.6.0"
+    const val splashScreen = "1.0.0-alpha02"
 }
 
 object AndroidLibs {
@@ -29,7 +30,8 @@ object AndroidLibs {
         "com.google.accompanist:accompanist-insets-ui:${AndroidPluginVersions.googleAccompanist}",
         "com.google.accompanist:accompanist-systemuicontroller:${AndroidPluginVersions.googleAccompanist}",
         "io.insert-koin:koin-android:${AndroidPluginVersions.koin}",
-        "io.insert-koin:koin-androidx-compose:${AndroidPluginVersions.koin}"
+        "io.insert-koin:koin-androidx-compose:${AndroidPluginVersions.koin}",
+        "androidx.core:core-splashscreen:${AndroidPluginVersions.splashScreen}"
     )
     val androidTestImplementations = listOf(
         "androidx.compose.ui:ui-test-junit4:${AndroidPluginVersions.compose}",
