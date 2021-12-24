@@ -1,47 +1,46 @@
 package com.mutualmobile.iswipe.android.view.screens.landing_screen.components
 
-import androidx.compose.animation.core.Spring
-import androidx.compose.animation.core.animateDp
-import androidx.compose.animation.core.spring
 import androidx.compose.animation.core.updateTransition
-import androidx.compose.foundation.background
+import androidx.compose.foundation.BorderStroke
+import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.wrapContentSize
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.TabPosition
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import com.google.accompanist.insets.navigationBarsPadding
+import com.google.accompanist.pager.ExperimentalPagerApi
+import com.google.accompanist.pager.PagerState
+import com.google.accompanist.pager.pagerTabIndicatorOffset
 
+@ExperimentalPagerApi
 @Composable
-fun SpringBoxIndicator(tabIndex: Int, tabPositions: List<TabPosition>) {
+fun BoxIndicator(tabIndex: Int, tabPositions: List<TabPosition>, pagerState: PagerState) {
     val transition = updateTransition(targetState = tabIndex, label = "")
-    val leftIndicator by transition.animateDp(label = "", transitionSpec = {
-        spring(stiffness = Spring.StiffnessLow)
-    }) {
-        tabPositions[it].left
-    }
-    val rightIndicator by transition.animateDp(label = "", transitionSpec = {
-        spring(stiffness = Spring.StiffnessMedium)
-    }) {
-        tabPositions[it].right
-    }
+    val leftIndicator = tabPositions[transition.currentState].left
+    val rightIndicator = tabPositions[transition.currentState].right
     Box(
         modifier = Modifier
             .fillMaxSize()
             .wrapContentSize(align = Alignment.BottomStart)
-            .offset(x = leftIndicator)
+            .pagerTabIndicatorOffset(pagerState = pagerState, tabPositions = tabPositions)
             .width(rightIndicator - leftIndicator)
             .padding(4.dp)
             .navigationBarsPadding()
             .fillMaxSize()
-            .background(MaterialTheme.colorScheme.secondary.copy(alpha = 0.1f))
+            .border(
+                border = BorderStroke(
+                    2.dp,
+                    MaterialTheme.colorScheme.secondary
+                ),
+                shape = RoundedCornerShape(20)
+            )
     )
 }

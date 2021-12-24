@@ -23,7 +23,7 @@ import com.google.accompanist.pager.ExperimentalPagerApi
 import com.google.accompanist.pager.HorizontalPager
 import com.google.accompanist.pager.rememberPagerState
 import com.mutualmobile.iswipe.android.R
-import com.mutualmobile.iswipe.android.view.screens.landing_screen.components.SpringBoxIndicator
+import com.mutualmobile.iswipe.android.view.screens.landing_screen.components.BoxIndicator
 import com.mutualmobile.iswipe.android.view.screens.weather_screen.WeatherScreen
 import com.mutualmobile.iswipe.android.view.screens.youtube_screen.YoutubeScreen
 import kotlinx.coroutines.launch
@@ -56,7 +56,7 @@ fun LandingScreen() {
             ScrollableTabRow(
                 selectedTabIndex = tabIndex,
                 indicator = { tabPositions ->
-                    SpringBoxIndicator(tabIndex, tabPositions)
+                    BoxIndicator(tabIndex, tabPositions, pagerState)
                 },
                 backgroundColor = MaterialTheme.colorScheme.primary,
             ) {
