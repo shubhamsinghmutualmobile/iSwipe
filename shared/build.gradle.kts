@@ -33,11 +33,12 @@ kotlin {
             dependencies {
                 implementation(kotlin("test-common"))
                 implementation(kotlin("test-annotations-common"))
+                CommonTestDependencies.implementations.forEach(::implementation)
             }
         }
         val androidMain by getting {
             dependencies {
-                CommonAndroidDependencies.implementations.forEach(::implementation)
+                AndroidMainDependencies.implementations.forEach(::implementation)
             }
         }
         val androidTest by getting {
@@ -55,7 +56,7 @@ kotlin {
             iosArm64Main.dependsOn(this)
             // iosSimulatorArm64Main.dependsOn(this)
             dependencies {
-                CommonIOSDependencies.implementations.forEach(::implementation)
+                IOSMainDependencies.implementations.forEach(::implementation)
             }
         }
         val iosX64Test by getting

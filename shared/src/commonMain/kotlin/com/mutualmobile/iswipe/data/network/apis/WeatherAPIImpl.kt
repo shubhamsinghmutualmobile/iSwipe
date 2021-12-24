@@ -8,10 +8,10 @@ import com.mutualmobile.iswipe.data.network.utils.safeApiCall
 import com.mutualmobile.iswipe.data.states.weather.CurrentWeatherState
 import io.ktor.client.request.get
 import org.koin.core.component.KoinComponent
-import org.koin.core.component.inject
 
-class WeatherAPIImpl : WeatherAPI, KoinComponent {
-    private val networkModule: NetworkModule by inject()
+class WeatherAPIImpl constructor(
+    networkModule: NetworkModule
+) : WeatherAPI, KoinComponent {
     private val networkClient = networkModule.getNetworkClient()
 
     override suspend fun getCurrentWeather(cityName: String, apiKey: String): CurrentWeatherState {

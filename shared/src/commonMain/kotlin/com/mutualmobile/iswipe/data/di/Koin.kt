@@ -16,5 +16,5 @@ fun initKoin() = initKoin {}
 
 val network = module {
     single { NetworkModule() }
-    single<WeatherAPI> { WeatherAPIImpl() }
+    single<WeatherAPI> { WeatherAPIImpl(get()) }
 }

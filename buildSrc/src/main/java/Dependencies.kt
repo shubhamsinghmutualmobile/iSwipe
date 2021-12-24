@@ -42,26 +42,39 @@ object CommonMainDependencies {
     val implementations = listOf(
         "io.ktor:ktor-client-core:${CommonMainPluginVersions.ktor}",
         "io.ktor:ktor-client-serialization:${CommonMainPluginVersions.ktor}",
+        "io.ktor:ktor-client-cio:${CommonMainPluginVersions.ktor}",
+        "io.ktor:ktor-client-mock:${CommonMainPluginVersions.ktor}",
         "io.insert-koin:koin-core:${CommonMainPluginVersions.koin}"
     )
 }
 
-object CommonAndroidVersions {
+object AndroidMainVersions {
     const val ktor = CommonMainPluginVersions.ktor
 }
 
-object CommonAndroidDependencies {
+object AndroidMainDependencies {
     val implementations = listOf(
-        "io.ktor:ktor-client-android:${CommonAndroidVersions.ktor}"
+        "io.ktor:ktor-client-android:${AndroidMainVersions.ktor}"
     )
 }
 
-object CommonIOSVersions {
+object IOSMainVersions {
     const val ktor = CommonMainPluginVersions.ktor
 }
 
-object CommonIOSDependencies {
+object IOSMainDependencies {
     val implementations = listOf(
-        "io.ktor:ktor-client-ios:${CommonIOSVersions.ktor}"
+        "io.ktor:ktor-client-ios:${IOSMainVersions.ktor}"
+    )
+}
+
+object CommonTestVersions {
+    const val koin = CommonMainPluginVersions.koin
+}
+
+object CommonTestDependencies {
+    val implementations = listOf(
+        "io.insert-koin:koin-test:${CommonTestVersions.koin}",
+        "io.insert-koin:koin-test-junit4:${CommonTestVersions.koin}"
     )
 }
