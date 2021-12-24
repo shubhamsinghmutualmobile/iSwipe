@@ -8,6 +8,9 @@ object AndroidPluginVersions {
     const val composeMaterial3 = "1.0.0-alpha02"
     const val googleAccompanist = "0.22.0-rc"
     const val koin = CommonMainPluginVersions.koin
+    const val ktor = CommonMainPluginVersions.ktor
+    const val turbine = "0.7.0"
+    const val kotlin = "1.6.0"
 }
 
 object AndroidLibs {
@@ -30,6 +33,16 @@ object AndroidLibs {
     )
     val androidTestImplementations = listOf(
         "androidx.compose.ui:ui-test-junit4:${AndroidPluginVersions.compose}",
+        "io.insert-koin:koin-test:${AndroidPluginVersions.koin}",
+        "io.insert-koin:koin-test-junit4:${AndroidPluginVersions.koin}",
+        "io.ktor:ktor-client-mock:${AndroidPluginVersions.ktor}",
+    )
+    val testImplementations = listOf(
+        "app.cash.turbine:turbine:${AndroidPluginVersions.turbine}",
+        "io.insert-koin:koin-test:${AndroidPluginVersions.koin}",
+        "io.insert-koin:koin-test-junit4:${AndroidPluginVersions.koin}",
+        "io.ktor:ktor-client-mock:${AndroidPluginVersions.ktor}",
+        "org.jetbrains.kotlinx:kotlinx-coroutines-test:${AndroidPluginVersions.kotlin}"
     )
 }
 

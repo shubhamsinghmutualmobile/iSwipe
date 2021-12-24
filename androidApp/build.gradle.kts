@@ -31,5 +31,6 @@ android {
 dependencies {
     implementation(project(":shared"))
     AndroidLibs.implementations.forEach(::implementation)
+    AndroidLibs.testImplementations.forEach(::testImplementation)
     AndroidLibs.androidTestImplementations.forEach(::androidTestImplementation)
 }
