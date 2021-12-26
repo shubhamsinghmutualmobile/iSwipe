@@ -8,6 +8,7 @@ interface YoutubeAPI {
     @Throws(Exception::class)
     suspend fun getTrendingVideos(
         countryCode: String = "IN",
-        apiKey: String = NetworkUtils.YOUTUBE_DATA_API_KEY
+        apiKey: String = NetworkUtils.YOUTUBE_DATA_API_KEY,
+        pageToken: String = ""
     ): ResponseState<YoutubeTrendingVideosResponse>
 }

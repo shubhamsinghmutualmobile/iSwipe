@@ -12,6 +12,7 @@ object AndroidPluginVersions {
     const val turbine = "0.7.0"
     const val kotlin = "1.6.0"
     const val splashScreen = "1.0.0-alpha02"
+    const val coil = "1.4.0"
 }
 
 object AndroidLibs {
@@ -33,6 +34,7 @@ object AndroidLibs {
         "io.insert-koin:koin-android:${AndroidPluginVersions.koin}",
         "io.insert-koin:koin-androidx-compose:${AndroidPluginVersions.koin}",
         "androidx.core:core-splashscreen:${AndroidPluginVersions.splashScreen}",
+        "io.coil-kt:coil-compose:${AndroidPluginVersions.coil}"
     )
     val androidTestImplementations = listOf(
         "androidx.compose.ui:ui-test-junit4:${AndroidPluginVersions.compose}",

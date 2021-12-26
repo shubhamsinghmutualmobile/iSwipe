@@ -7,14 +7,16 @@ import com.mutualmobile.iswipe.data.network.utils.NetworkUtils
 import com.mutualmobile.iswipe.data.network.utils.safeApiCall
 import com.mutualmobile.iswipe.data.states.ResponseState
 import io.ktor.client.request.get
+import kotlinx.serialization.ExperimentalSerializationApi
 import org.koin.core.component.KoinComponent
 
+@ExperimentalSerializationApi
 class YoutubeAPIImpl constructor(networkModule: NetworkModule) : YoutubeAPI, KoinComponent {
     private val networkClient = networkModule.getNetworkClient()
 
-    override suspend fun getTrendingVideos(countryCode: String, apiKey: String): ResponseState<YoutubeTrendingVideosResponse> {
+    override suspend fun getTrendingVideos(countryCode: String, apiKey: String, pageToken: String): ResponseState<YoutubeTrendingVideosResponse> {
         val response = safeApiCall {
-            networkClient.get(NetworkUtils.getTrendingYoutubeVideos(countryCode, apiKey)) as YoutubeTrendingVideosResponse
+            networkClient.get(NetworkUtils.getTrendingYoutubeVideosUrl(countryCode, apiKey, pageToken)) as YoutubeTrendingVideosResponse
         }
         return when (response) {
             is Either.Type -> {

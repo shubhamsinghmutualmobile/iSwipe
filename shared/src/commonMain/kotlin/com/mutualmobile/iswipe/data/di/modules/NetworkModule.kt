@@ -16,6 +16,7 @@ class NetworkModule constructor(
             serializer = KotlinxSerializer(
                 json = Json {
                     explicitNulls = false
+                    ignoreUnknownKeys = true
                 }
             )
         }

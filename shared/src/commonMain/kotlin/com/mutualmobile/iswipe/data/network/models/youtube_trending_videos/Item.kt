@@ -8,7 +8,7 @@ data class Item(
     @SerialName("etag")
     val etag: String?,
     @SerialName("id")
-    val id: String?,
+    val videoLinkEndPart: String?,
     @SerialName("kind")
     val kind: String?,
     @SerialName("snippet")

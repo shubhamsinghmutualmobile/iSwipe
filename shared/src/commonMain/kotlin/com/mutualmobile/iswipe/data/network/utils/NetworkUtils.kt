@@ -9,8 +9,8 @@ object NetworkUtils {
         return "https://api.openweathermap.org/data/2.5/weather?q=$city&appid=$apiKey"
     }
 
-    fun getTrendingYoutubeVideos(countryCode: String, apiKey: String): String {
-        return "https://youtube.googleapis.com/youtube/v3/videos?part=statistics%2Csnippet&chart=mostPopular&regionCode=$countryCode&key=$apiKey"
+    fun getTrendingYoutubeVideosUrl(countryCode: String, apiKey: String, pageToken: String): String {
+        return "https://youtube.googleapis.com/youtube/v3/videos?part=statistics%2Csnippet&chart=mostPopular&regionCode=$countryCode&key=$apiKey&pageToken=$pageToken"
     }
 }
 

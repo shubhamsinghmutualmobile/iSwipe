@@ -13,6 +13,8 @@ data class YoutubeTrendingVideosResponse(
     val kind: String?,
     @SerialName("nextPageToken")
     val nextPageToken: String?,
+    @SerialName("prevPageToken")
+    val prevPageToken: String?,
     @SerialName("pageInfo")
     val pageInfo: PageInfo?
 )
