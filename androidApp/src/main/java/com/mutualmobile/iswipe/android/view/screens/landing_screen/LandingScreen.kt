@@ -5,6 +5,7 @@ import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.material.ScrollableTabRow
 import androidx.compose.material.Tab
@@ -85,7 +86,7 @@ fun LandingScreen() {
                         icon = {
                             Image(
                                 painter = painterResource(id = screen.icon),
-                                contentDescription = null,
+                                contentDescription = "${screen.name} tab",
                                 modifier = Modifier.size(24.dp)
                             )
                         }
@@ -93,10 +94,12 @@ fun LandingScreen() {
                 }
             }
         }
-    ) {
+    ) { tabPadding ->
         HorizontalPager(
             state = pagerState,
-            modifier = Modifier.fillMaxSize(),
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(tabPadding),
             count = TabScreens.values().size
         ) { index ->
             Column(
