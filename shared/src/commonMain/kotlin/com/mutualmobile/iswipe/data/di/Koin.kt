@@ -3,6 +3,8 @@ package com.mutualmobile.iswipe.data.di
 import com.mutualmobile.iswipe.data.di.modules.NetworkModule
 import com.mutualmobile.iswipe.data.network.apis.WeatherAPI
 import com.mutualmobile.iswipe.data.network.apis.WeatherAPIImpl
+import com.mutualmobile.iswipe.data.network.apis.YoutubeAPI
+import com.mutualmobile.iswipe.data.network.apis.YoutubeAPIImpl
 import org.koin.core.context.startKoin
 import org.koin.dsl.KoinAppDeclaration
 import org.koin.dsl.module
@@ -17,4 +19,5 @@ fun initKoin() = initKoin {}
 val network = module {
     single { NetworkModule() }
     single<WeatherAPI> { WeatherAPIImpl(get()) }
+    single<YoutubeAPI> { YoutubeAPIImpl(get()) }
 }

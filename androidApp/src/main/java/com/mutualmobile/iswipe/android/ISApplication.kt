@@ -2,6 +2,7 @@ package com.mutualmobile.iswipe.android
 
 import android.app.Application
 import com.mutualmobile.iswipe.android.viewmodels.WeatherViewModel
+import com.mutualmobile.iswipe.android.viewmodels.YoutubeViewModel
 import com.mutualmobile.iswipe.data.di.network
 import org.koin.android.ext.koin.androidContext
 import org.koin.android.ext.koin.androidLogger
@@ -19,6 +20,7 @@ class ISApplication : Application() {
                 network,
                 module {
                     single { WeatherViewModel(get()) }
+                    single { YoutubeViewModel(get()) }
                 }
             )
         }

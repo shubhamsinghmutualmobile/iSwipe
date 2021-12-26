@@ -20,7 +20,7 @@ class WeatherAPIImpl constructor(
         }
         return when (response) {
             is Either.Type -> {
-                CurrentWeatherState.Success(data = response.type)
+                CurrentWeatherState.Success(data = response.data)
             }
             is Either.Error -> {
                 CurrentWeatherState.Failure(errorMsg = response.errorMsg)
