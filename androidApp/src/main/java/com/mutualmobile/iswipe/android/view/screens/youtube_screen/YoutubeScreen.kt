@@ -13,12 +13,15 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.rememberLazyListState
+import androidx.compose.material.CircularProgressIndicator
 import androidx.compose.material.Divider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
@@ -31,6 +34,7 @@ import com.mutualmobile.iswipe.android.R
 import com.mutualmobile.iswipe.android.view.utils.isScrolledToEnd
 import com.mutualmobile.iswipe.android.viewmodels.YoutubeViewModel
 import com.mutualmobile.iswipe.data.states.ResponseState
+import kotlinx.coroutines.launch
 import org.koin.androidx.compose.get
 
 @Composable
@@ -67,6 +71,7 @@ fun YoutubeScreen(
                 }
                 is ResponseState.Success -> {
                     val listState = rememberLazyListState()
+                    val coroutineScope = rememberCoroutineScope()
                     LazyColumn(
                         state = listState,
                         modifier = Modifier.fillMaxSize(),
@@ -125,11 +130,30 @@ fun YoutubeScreen(
                                             YoutubeCaptionDotDivider()
                                             YoutubeCardCaptionText(text = "${video.snippet?.publishedAt} ago")
                                         }
-                                        if (listState.isScrolledToEnd()) {
-                                            youtubeViewModel.addNewItemsToList()
-                                        }
                                     }
                                 }
+                            }
+                            if (listState.isScrolledToEnd()) {
+                                item {
+                                    Box(
+                                        contentAlignment = Alignment.Center,
+                                        modifier = Modifier
+                                            .fillMaxWidth()
+                                            .padding(bottom = 16.dp)
+                                    ) {
+                                        LaunchedEffect(key1 = "ScrollToShowCircularProgressIndicator") {
+                                            coroutineScope.launch {
+                                                listState.animateScrollToItem(listState.layoutInfo.totalItemsCount + 1)
+                                            }
+                                        }
+                                        CircularProgressIndicator(
+                                            modifier = Modifier
+                                                .size(32.dp),
+                                            strokeWidth = 2.dp
+                                        )
+                                    }
+                                }
+                                youtubeViewModel.addNewItemsToList()
                             }
                         }
                     )

@@ -10,7 +10,6 @@ import com.mutualmobile.iswipe.data.states.ResponseState
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
-import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 
 class YoutubeViewModel constructor(
@@ -45,7 +44,9 @@ class YoutubeViewModel constructor(
                     updateListOfYoutubeVideos()
                 }
                 is ResponseState.Failure -> {
-                    _currentYoutubeResponse.emit(ResponseState.Failure(errorMsg = response.errorMsg))
+                    if (_listOfYoutubeVideos.value.isEmpty()) {
+                        _currentYoutubeResponse.emit(ResponseState.Failure(errorMsg = response.errorMsg))
+                    }
                 }
                 else -> {
                     _currentYoutubeResponse.emit(ResponseState.Failure(errorMsg = NetworkUtils.GENERIC_ERROR_MSG))
@@ -56,13 +57,11 @@ class YoutubeViewModel constructor(
 
     private fun updateListOfYoutubeVideos() {
         viewModelScope.launch {
-            currentYoutubeResponse.collect { responseState ->
-                if (responseState is ResponseState.Success) {
-                    responseState.data.items?.let { nnItemList ->
-                        nnItemList.forEach { item ->
-                            if (!_listOfYoutubeVideos.value.contains(item)) {
-                                _listOfYoutubeVideos.value.add(item)
-                            }
+            if (_currentYoutubeResponse.value is ResponseState.Success) {
+                (_currentYoutubeResponse.value as ResponseState.Success).data.items?.let { nnItemList ->
+                    nnItemList.forEach { item ->
+                        if (!_listOfYoutubeVideos.value.contains(item)) {
+                            _listOfYoutubeVideos.value.add(item)
                         }
                     }
                 }
