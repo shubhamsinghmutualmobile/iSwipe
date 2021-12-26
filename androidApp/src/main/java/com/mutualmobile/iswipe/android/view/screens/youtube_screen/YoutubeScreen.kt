@@ -9,6 +9,9 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import com.google.accompanist.insets.statusBarsPadding
+import com.google.accompanist.swiperefresh.SwipeRefresh
+import com.google.accompanist.swiperefresh.rememberSwipeRefreshState
 import com.mutualmobile.iswipe.android.viewmodels.YoutubeViewModel
 import com.mutualmobile.iswipe.data.states.ResponseState
 import org.koin.androidx.compose.get
@@ -18,28 +21,37 @@ fun YoutubeScreen(
     youtubeViewModel: YoutubeViewModel = get()
 ) {
     val response = youtubeViewModel.currentYoutubeResponse.collectAsState()
+    val isRefreshing = rememberSwipeRefreshState(isRefreshing = response.value is ResponseState.Loading)
 
-    Box(
+    SwipeRefresh(
         modifier = Modifier
             .fillMaxSize()
-            .verticalScroll(rememberScrollState()),
-        contentAlignment = Alignment.Center
+            .statusBarsPadding(),
+        state = isRefreshing,
+        onRefresh = { youtubeViewModel.getCurrentYoutubeResponse() }
     ) {
-        Text(
-            text = when (val result = response.value) {
-                is ResponseState.Empty -> {
-                    ""
+        Box(
+            modifier = Modifier
+                .fillMaxSize()
+                .verticalScroll(rememberScrollState()),
+            contentAlignment = Alignment.Center
+        ) {
+            Text(
+                text = when (val result = response.value) {
+                    is ResponseState.Empty -> {
+                        ""
+                    }
+                    is ResponseState.Loading -> {
+                        "Loading your videos..."
+                    }
+                    is ResponseState.Success -> {
+                        result.data.toString()
+                    }
+                    is ResponseState.Failure -> {
+                        result.errorMsg
+                    }
                 }
-                is ResponseState.Loading -> {
-                    "Loading your videos..."
-                }
-                is ResponseState.Success -> {
-                    result.data.toString()
-                }
-                is ResponseState.Failure -> {
-                    result.errorMsg
-                }
-            }
-        )
+            )
+        }
     }
 }

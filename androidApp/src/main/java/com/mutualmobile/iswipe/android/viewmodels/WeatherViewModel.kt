@@ -19,7 +19,7 @@ class WeatherViewModel constructor(
         getCurrentWeather()
     }
 
-    private fun getCurrentWeather() {
+    fun getCurrentWeather() {
         viewModelScope.launch {
             _currentWeather.emit(CurrentWeatherState.Loading)
             when (val response = weatherAPI.getCurrentWeather()) {

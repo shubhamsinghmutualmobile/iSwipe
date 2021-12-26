@@ -29,9 +29,10 @@ object AndroidLibs {
         "com.google.accompanist:accompanist-insets:${AndroidPluginVersions.googleAccompanist}",
         "com.google.accompanist:accompanist-insets-ui:${AndroidPluginVersions.googleAccompanist}",
         "com.google.accompanist:accompanist-systemuicontroller:${AndroidPluginVersions.googleAccompanist}",
+        "com.google.accompanist:accompanist-swiperefresh:${AndroidPluginVersions.googleAccompanist}",
         "io.insert-koin:koin-android:${AndroidPluginVersions.koin}",
         "io.insert-koin:koin-androidx-compose:${AndroidPluginVersions.koin}",
-        "androidx.core:core-splashscreen:${AndroidPluginVersions.splashScreen}"
+        "androidx.core:core-splashscreen:${AndroidPluginVersions.splashScreen}",
     )
     val androidTestImplementations = listOf(
         "androidx.compose.ui:ui-test-junit4:${AndroidPluginVersions.compose}",
@@ -44,7 +45,7 @@ object AndroidLibs {
         "io.insert-koin:koin-test:${AndroidPluginVersions.koin}",
         "io.insert-koin:koin-test-junit4:${AndroidPluginVersions.koin}",
         "io.ktor:ktor-client-mock:${AndroidPluginVersions.ktor}",
-        "org.jetbrains.kotlinx:kotlinx-coroutines-test:${AndroidPluginVersions.kotlin}"
+        "org.jetbrains.kotlinx:kotlinx-coroutines-test:${AndroidPluginVersions.kotlin}",
     )
 }
 
@@ -59,7 +60,7 @@ object CommonMainDependencies {
         "io.ktor:ktor-client-serialization:${CommonMainPluginVersions.ktor}",
         "io.ktor:ktor-client-cio:${CommonMainPluginVersions.ktor}",
         "io.ktor:ktor-client-mock:${CommonMainPluginVersions.ktor}",
-        "io.insert-koin:koin-core:${CommonMainPluginVersions.koin}"
+        "io.insert-koin:koin-core:${CommonMainPluginVersions.koin}",
     )
 }
 
@@ -69,7 +70,7 @@ object AndroidMainVersions {
 
 object AndroidMainDependencies {
     val implementations = listOf(
-        "io.ktor:ktor-client-android:${AndroidMainVersions.ktor}"
+        "io.ktor:ktor-client-android:${AndroidMainVersions.ktor}",
     )
 }
 
@@ -79,7 +80,7 @@ object IOSMainVersions {
 
 object IOSMainDependencies {
     val implementations = listOf(
-        "io.ktor:ktor-client-ios:${IOSMainVersions.ktor}"
+        "io.ktor:ktor-client-ios:${IOSMainVersions.ktor}",
     )
 }
 
@@ -90,6 +91,6 @@ object CommonTestVersions {
 object CommonTestDependencies {
     val implementations = listOf(
         "io.insert-koin:koin-test:${CommonTestVersions.koin}",
-        "io.insert-koin:koin-test-junit4:${CommonTestVersions.koin}"
+        "io.insert-koin:koin-test-junit4:${CommonTestVersions.koin}",
     )
 }

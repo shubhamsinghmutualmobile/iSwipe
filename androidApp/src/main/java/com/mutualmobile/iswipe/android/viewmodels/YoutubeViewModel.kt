@@ -20,7 +20,7 @@ class YoutubeViewModel constructor(
         getCurrentYoutubeResponse()
     }
 
-    private fun getCurrentYoutubeResponse() {
+    fun getCurrentYoutubeResponse() {
         viewModelScope.launch {
             _currentYoutubeResponse.emit(ResponseState.Loading)
             when (val response = youtubeApi.getTrendingVideos()) {
