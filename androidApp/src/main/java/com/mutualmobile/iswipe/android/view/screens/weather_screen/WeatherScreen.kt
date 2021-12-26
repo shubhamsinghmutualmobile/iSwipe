@@ -13,7 +13,7 @@ import com.google.accompanist.insets.statusBarsPadding
 import com.google.accompanist.swiperefresh.SwipeRefresh
 import com.google.accompanist.swiperefresh.rememberSwipeRefreshState
 import com.mutualmobile.iswipe.android.viewmodels.WeatherViewModel
-import com.mutualmobile.iswipe.data.states.weather.CurrentWeatherState
+import com.mutualmobile.iswipe.data.states.ResponseState
 import org.koin.androidx.compose.get
 
 @Composable
@@ -21,7 +21,7 @@ fun WeatherScreen(
     weatherViewModel: WeatherViewModel = get()
 ) {
     val currentWeather = weatherViewModel.currentWeather.collectAsState()
-    val isRefreshing = rememberSwipeRefreshState(isRefreshing = currentWeather.value is CurrentWeatherState.Loading)
+    val isRefreshing = rememberSwipeRefreshState(isRefreshing = currentWeather.value is ResponseState.Loading)
 
     SwipeRefresh(
         modifier = Modifier
@@ -38,16 +38,16 @@ fun WeatherScreen(
         ) {
             Text(
                 text = when (val result = currentWeather.value) {
-                    is CurrentWeatherState.Empty -> {
+                    is ResponseState.Empty -> {
                         ""
                     }
-                    is CurrentWeatherState.Loading -> {
+                    is ResponseState.Loading -> {
                         "Loading weather..."
                     }
-                    is CurrentWeatherState.Success -> {
+                    is ResponseState.Success -> {
                         result.data.toString()
                     }
-                    is CurrentWeatherState.Failure -> {
+                    is ResponseState.Failure -> {
                         result.errorMsg
                     }
                 }

@@ -2,7 +2,7 @@ package com.mutualmobile.iswipe.data.network.apis
 
 import com.mutualmobile.iswipe.data.di.modules.NetworkModule
 import com.mutualmobile.iswipe.data.network.utils.TestNetworkUtils
-import com.mutualmobile.iswipe.data.states.weather.CurrentWeatherState
+import com.mutualmobile.iswipe.data.states.ResponseState
 import io.ktor.client.HttpClient
 import io.ktor.client.engine.mock.MockEngine
 import io.ktor.client.engine.mock.respond
@@ -11,6 +11,7 @@ import io.ktor.http.HttpStatusCode
 import io.ktor.http.headersOf
 import io.ktor.utils.io.ByteReadChannel
 import kotlinx.coroutines.runBlocking
+import kotlinx.serialization.ExperimentalSerializationApi
 import org.koin.core.context.startKoin
 import org.koin.core.context.stopKoin
 import org.koin.dsl.module
@@ -22,6 +23,7 @@ import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertTrue
 
+@ExperimentalSerializationApi
 class WeatherAPITest : KoinTest {
     private val testSuccessWeatherModule = module {
         single {
@@ -61,9 +63,9 @@ class WeatherAPITest : KoinTest {
         val weatherApi: WeatherAPI by inject()
         runBlocking {
             assertTrue {
-                weatherApi.getCurrentWeather() is CurrentWeatherState.Success
+                weatherApi.getCurrentWeather() is ResponseState.Success
             }
-            assertEquals("Delhi", (weatherApi.getCurrentWeather() as CurrentWeatherState.Success).data.name)
+            assertEquals("Delhi", (weatherApi.getCurrentWeather() as ResponseState.Success).data.name)
         }
     }
 }

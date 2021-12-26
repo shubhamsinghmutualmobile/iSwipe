@@ -5,7 +5,7 @@ import com.mutualmobile.iswipe.android.utils.TestNetworkUtils
 import com.mutualmobile.iswipe.data.di.modules.NetworkModule
 import com.mutualmobile.iswipe.data.network.apis.WeatherAPI
 import com.mutualmobile.iswipe.data.network.apis.WeatherAPIImpl
-import com.mutualmobile.iswipe.data.states.weather.CurrentWeatherState
+import com.mutualmobile.iswipe.data.states.ResponseState
 import io.ktor.client.HttpClient
 import io.ktor.client.engine.mock.MockEngine
 import io.ktor.client.engine.mock.respond
@@ -75,8 +75,8 @@ class WeatherViewModelTest : KoinTest {
                 weatherViewModel.currentWeather.test {
                     awaitItem() // Because getCurrentWeather() will first emit Loading state
                     val result = awaitItem()
-                    assert(result is CurrentWeatherState.Success)
-                    assert((result as CurrentWeatherState.Success).data.name == "Delhi")
+                    assert(result is ResponseState.Success)
+                    assert((result as ResponseState.Success).data.name == "Delhi")
                 }
             }
         }

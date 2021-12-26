@@ -5,25 +5,27 @@ import com.mutualmobile.iswipe.data.network.models.weather.CurrentWeatherRespons
 import com.mutualmobile.iswipe.data.network.utils.Either
 import com.mutualmobile.iswipe.data.network.utils.NetworkUtils
 import com.mutualmobile.iswipe.data.network.utils.safeApiCall
-import com.mutualmobile.iswipe.data.states.weather.CurrentWeatherState
+import com.mutualmobile.iswipe.data.states.ResponseState
 import io.ktor.client.request.get
+import kotlinx.serialization.ExperimentalSerializationApi
 import org.koin.core.component.KoinComponent
 
+@ExperimentalSerializationApi
 class WeatherAPIImpl constructor(
     networkModule: NetworkModule
 ) : WeatherAPI, KoinComponent {
     private val networkClient = networkModule.getNetworkClient()
 
-    override suspend fun getCurrentWeather(cityName: String, apiKey: String): CurrentWeatherState {
+    override suspend fun getCurrentWeather(cityName: String, apiKey: String): ResponseState<CurrentWeatherResponse> {
         val response = safeApiCall {
             networkClient.get(NetworkUtils.getCurrentWeatherApiUrl()) as CurrentWeatherResponse
         }
         return when (response) {
             is Either.Type -> {
-                CurrentWeatherState.Success(data = response.data)
+                ResponseState.Success(data = response.data)
             }
             is Either.Error -> {
-                CurrentWeatherState.Failure(errorMsg = response.errorMsg)
+                ResponseState.Failure(errorMsg = response.errorMsg)
             }
         }
     }
