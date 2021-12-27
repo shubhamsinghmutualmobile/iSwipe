@@ -2,6 +2,7 @@ package com.mutualmobile.iswipe.android.view.screens.landing_screen
 
 import androidx.annotation.DrawableRes
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
@@ -59,9 +60,7 @@ fun LandingScreen() {
     val coroutineScope = rememberCoroutineScope()
 
     val systemUiController = rememberSystemUiController()
-    val useDarkIcons = androidx.compose.material.MaterialTheme.colors.isLight
-    systemUiController.setStatusBarColor(color = MaterialTheme.colorScheme.surface, darkIcons = !useDarkIcons)
-    systemUiController.setNavigationBarColor(color = Color.Transparent, darkIcons = !useDarkIcons)
+    systemUiController.setSystemBarsColor(color = Color.Transparent, darkIcons = !isSystemInDarkTheme())
 
     Scaffold(
         bottomBar = {

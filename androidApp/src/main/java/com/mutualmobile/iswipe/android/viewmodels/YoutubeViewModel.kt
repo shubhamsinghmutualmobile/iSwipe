@@ -23,6 +23,15 @@ class YoutubeViewModel constructor(
     private val _listOfYoutubeVideos: MutableStateFlow<MutableList<Item>> = MutableStateFlow(mutableListOf())
     val listOfYoutubeVideos: StateFlow<MutableList<Item>> = _listOfYoutubeVideos.asStateFlow()
 
+    private val _isVideoPlaying: MutableStateFlow<Boolean> = MutableStateFlow(value = false)
+    val isVideoPlaying: StateFlow<Boolean> = _isVideoPlaying.asStateFlow()
+
+    private val _isCardExpanded: MutableStateFlow<Boolean> = MutableStateFlow(value = false)
+    val isCardExpanded: StateFlow<Boolean> = _isCardExpanded.asStateFlow()
+
+    private val _isCardTouched: MutableStateFlow<Boolean> = MutableStateFlow(value = false)
+    val isCardTouched: StateFlow<Boolean> = _isCardTouched.asStateFlow()
+
     init {
         getCurrentYoutubeResponse()
     }
@@ -88,6 +97,30 @@ class YoutubeViewModel constructor(
     fun clearYoutubeList() {
         viewModelScope.launch {
             _listOfYoutubeVideos.emit(mutableListOf())
+        }
+    }
+
+    fun toggleIsVideoPlaying(isVideoPlaying: Boolean) {
+        viewModelScope.launch {
+            withContext(Dispatchers.IO) {
+                _isVideoPlaying.emit(!isVideoPlaying)
+            }
+        }
+    }
+
+    fun setIsCardExpanded(isCardExpanded: Boolean) {
+        viewModelScope.launch {
+            withContext(Dispatchers.IO) {
+                _isCardExpanded.emit(isCardExpanded)
+            }
+        }
+    }
+
+    fun toggleIsCardTouched(isCardTouched: Boolean) {
+        viewModelScope.launch {
+            withContext(Dispatchers.IO) {
+                _isCardTouched.emit(!isCardTouched)
+            }
         }
     }
 }

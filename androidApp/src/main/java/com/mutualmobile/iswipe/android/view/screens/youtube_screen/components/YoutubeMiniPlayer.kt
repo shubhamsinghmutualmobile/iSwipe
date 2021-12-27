@@ -13,6 +13,8 @@ import androidx.compose.material.FractionalThreshold
 import androidx.compose.material.rememberSwipeableState
 import androidx.compose.material.swipeable
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -22,13 +24,18 @@ import androidx.compose.ui.unit.dp
 import com.google.accompanist.insets.LocalWindowInsets
 import com.google.accompanist.insets.rememberInsetsPaddingValues
 import com.mutualmobile.iswipe.android.view.screens.youtube_screen.YoutubeScreen
+import com.mutualmobile.iswipe.android.viewmodels.YoutubeViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import org.koin.androidx.compose.get
 
 @OptIn(ExperimentalMaterialApi::class)
 @Composable
-fun YoutubeMiniPlayer() {
+fun YoutubeMiniPlayer(
+    youtubeViewModel: YoutubeViewModel = get()
+) {
+    val isCardTouched by youtubeViewModel.isCardTouched.collectAsState()
     val coroutineScope = rememberCoroutineScope()
     val swipeableState = rememberSwipeableState(initialValue = 0)
     val screenHeightDp = with(LocalDensity.current) {
@@ -39,6 +46,8 @@ fun YoutubeMiniPlayer() {
             ).toPx()
     }
     val anchors = mapOf(0f to 0, screenHeightDp to 1)
+
+    youtubeViewModel.setIsCardExpanded(swipeableState.currentValue == 1)
 
     Card(
         modifier = Modifier
@@ -55,13 +64,15 @@ fun YoutubeMiniPlayer() {
         shape = RoundedCornerShape(0),
         backgroundColor = Color.Transparent,
         onClick = {
+            youtubeViewModel.toggleIsCardTouched(isCardTouched)
             coroutineScope.launch {
                 withContext(Dispatchers.IO) {
                     swipeableState.animateTo(1, tween(durationMillis = 500))
                 }
             }
         },
-        elevation = 0.dp
+        elevation = 0.dp,
+        indication = null
     ) {
         BackHandler(onBack = {
             coroutineScope.launch {
