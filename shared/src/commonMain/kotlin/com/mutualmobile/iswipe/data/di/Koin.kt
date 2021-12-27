@@ -5,6 +5,15 @@ import com.mutualmobile.iswipe.data.network.apis.WeatherAPI
 import com.mutualmobile.iswipe.data.network.apis.WeatherAPIImpl
 import com.mutualmobile.iswipe.data.network.apis.YoutubeAPI
 import com.mutualmobile.iswipe.data.network.apis.YoutubeAPIImpl
+import com.mutualmobile.iswipe.data.network.utils.TestNetworkUtils
+import io.ktor.client.HttpClient
+import io.ktor.client.engine.mock.MockEngine
+import io.ktor.client.engine.mock.respond
+import io.ktor.http.HttpHeaders
+import io.ktor.http.HttpStatusCode
+import io.ktor.http.headersOf
+import io.ktor.utils.io.ByteReadChannel
+import kotlinx.coroutines.delay
 import org.koin.core.context.startKoin
 import org.koin.dsl.KoinAppDeclaration
 import org.koin.dsl.module
@@ -16,8 +25,22 @@ fun initKoin(appDeclaration: KoinAppDeclaration = {}) = startKoin {
 
 fun initKoin() = initKoin {}
 
+// Useful while testing
+val mockYoutubeHttpClient = HttpClient(
+    MockEngine {
+        delay(2000)
+        respond(
+            content = ByteReadChannel(
+                TestNetworkUtils.YOUTUBE_VIDEOS_RESPONSE_SUCCESS.trimIndent()
+            ),
+            status = HttpStatusCode.OK,
+            headers = headersOf(HttpHeaders.ContentType, "application/json")
+        )
+    }
+)
+
 val network = module {
-    single { NetworkModule() }
+    single { NetworkModule(mockYoutubeHttpClient) }
     single<WeatherAPI> { WeatherAPIImpl(get()) }
     single<YoutubeAPI> { YoutubeAPIImpl(get()) }
 }

@@ -30,3 +30,27 @@ val Typography = Typography(
         letterSpacing = 0.5.sp
     ),
 )
+
+val YoutubePlayerTypography = Typography(
+    titleMedium = TextStyle(
+        fontFamily = FontFamily.Default,
+        fontWeight = FontWeight.SemiBold,
+        fontSize = 14.sp,
+        lineHeight = 20.sp,
+        letterSpacing = 0.5.sp,
+    ),
+    bodySmall = TextStyle(
+        fontFamily = FontFamily.Default,
+        fontWeight = FontWeight.Light,
+        fontSize = 12.sp,
+        lineHeight = 20.sp,
+        letterSpacing = 0.5.sp
+    ),
+    titleLarge = TextStyle(
+        fontFamily = FontFamily.Default,
+        fontWeight = FontWeight.Bold,
+        fontSize = 18.sp,
+        lineHeight = 20.sp,
+        letterSpacing = 0.5.sp
+    ),
+)
