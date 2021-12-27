@@ -1,6 +1,5 @@
 package com.mutualmobile.iswipe.android.view.screens.youtube_screen.components
 
-import android.annotation.SuppressLint
 import android.net.Uri
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
@@ -10,7 +9,6 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Close
 import androidx.compose.material.icons.filled.PlayArrow
@@ -36,8 +34,6 @@ import com.google.android.exoplayer2.upstream.DefaultDataSource
 import com.mutualmobile.iswipe.android.view.screens.youtube_screen.YoutubeScreen
 import com.mutualmobile.iswipe.android.view.theme.YoutubePlayerTypography
 
-@ExperimentalMaterialApi
-@SuppressLint("RememberReturnType")
 @Composable
 fun ExoPlayer() {
     val context = LocalContext.current
