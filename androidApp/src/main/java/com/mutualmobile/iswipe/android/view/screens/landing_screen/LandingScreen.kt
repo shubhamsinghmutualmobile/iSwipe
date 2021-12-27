@@ -60,6 +60,7 @@ fun LandingScreen() {
 
     val systemUiController = rememberSystemUiController()
     val useDarkIcons = androidx.compose.material.MaterialTheme.colors.isLight
+    systemUiController.setStatusBarColor(color = MaterialTheme.colorScheme.surface, darkIcons = !useDarkIcons)
     systemUiController.setNavigationBarColor(color = Color.Transparent, darkIcons = !useDarkIcons)
 
     Scaffold(
@@ -69,7 +70,7 @@ fun LandingScreen() {
                 indicator = { tabPositions ->
                     BoxIndicator(tabIndex, tabPositions, pagerState)
                 },
-                backgroundColor = MaterialTheme.colorScheme.primary,
+                backgroundColor = MaterialTheme.colorScheme.surface,
             ) {
                 TabScreens.values().forEachIndexed { index, screen ->
                     Tab(
@@ -82,7 +83,7 @@ fun LandingScreen() {
                                 pagerState.animateScrollToPage(index)
                             }
                         },
-                        text = { Text(text = screen.name, color = MaterialTheme.colorScheme.inverseOnSurface) },
+                        text = { Text(text = screen.name, color = MaterialTheme.colorScheme.onSurface) },
                         icon = {
                             Image(
                                 painter = painterResource(id = screen.icon),

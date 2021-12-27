@@ -38,7 +38,7 @@ fun BoxIndicator(tabIndex: Int, tabPositions: List<TabPosition>, pagerState: Pag
             .border(
                 border = BorderStroke(
                     2.dp,
-                    MaterialTheme.colorScheme.inverseOnSurface.copy(alpha = 0.5f)
+                    MaterialTheme.colorScheme.primary
                 ),
                 shape = RoundedCornerShape(20)
             )
