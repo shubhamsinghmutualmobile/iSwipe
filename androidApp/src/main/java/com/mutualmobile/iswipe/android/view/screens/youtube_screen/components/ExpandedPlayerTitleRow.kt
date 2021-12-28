@@ -14,12 +14,17 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import com.mutualmobile.iswipe.android.view.theme.YoutubePlayerTypography
+import com.mutualmobile.iswipe.android.viewmodels.YoutubeViewModel
+import org.koin.androidx.compose.get
 
 @Composable
-fun ExpandedPlayerTitleRow() {
+fun ExpandedPlayerTitleRow(youtubeViewModel: YoutubeViewModel = get()) {
+    val currentVideoItem by youtubeViewModel.currentSelectedVideoItem.collectAsState()
     Column(
         modifier = Modifier
             .clickable(
@@ -33,11 +38,11 @@ fun ExpandedPlayerTitleRow() {
             horizontalArrangement = Arrangement.SpaceBetween,
             modifier = Modifier.fillMaxWidth()
         ) {
-            Text("Big title", style = YoutubePlayerTypography.titleLarge)
+            Text(currentVideoItem?.snippet?.title.orEmpty(), style = YoutubePlayerTypography.titleLarge)
             Icon(imageVector = Icons.Outlined.ArrowDropDown, contentDescription = null)
         }
         Text(
-            "Big sub-title",
+            "${ currentVideoItem?.statistics?.viewCount } views . ${ currentVideoItem?.snippet?.publishedAt } ago",
             style = YoutubePlayerTypography.bodySmall,
             color = MaterialTheme.colorScheme.onSurface.copy(0.75f),
             modifier = Modifier.padding(top = 4.dp)

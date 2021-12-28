@@ -10,6 +10,7 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Card
 import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material.FractionalThreshold
+import androidx.compose.material.SwipeableState
 import androidx.compose.material.rememberSwipeableState
 import androidx.compose.material.swipeable
 import androidx.compose.runtime.Composable
@@ -30,11 +31,17 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import org.koin.androidx.compose.get
 
+object YoutubeMiniPlayer {
+    const val SWIPE_ANIMATION_DURATION = 500
+}
+
 @OptIn(ExperimentalMaterialApi::class)
 @Composable
 fun YoutubeMiniPlayer(
-    youtubeViewModel: YoutubeViewModel = get()
+    youtubeViewModel: YoutubeViewModel = get(),
+    expandMiniPlayer: (swipeableState: SwipeableState<Int>) -> Unit
 ) {
+    val currentSelectedVideo by youtubeViewModel.currentSelectedVideoItem.collectAsState()
     val isCardTouched by youtubeViewModel.isCardTouched.collectAsState()
     val coroutineScope = rememberCoroutineScope()
     val swipeableState = rememberSwipeableState(initialValue = 0)
@@ -48,6 +55,8 @@ fun YoutubeMiniPlayer(
     val anchors = mapOf(0f to 0, screenHeightDp to 1)
 
     youtubeViewModel.setIsCardExpanded(swipeableState.currentValue == 1)
+
+    expandMiniPlayer(swipeableState)
 
     Card(
         modifier = Modifier
@@ -67,7 +76,7 @@ fun YoutubeMiniPlayer(
             youtubeViewModel.toggleIsCardTouched(isCardTouched)
             coroutineScope.launch {
                 withContext(Dispatchers.IO) {
-                    swipeableState.animateTo(1, tween(durationMillis = 500))
+                    swipeableState.animateTo(1, tween(durationMillis = YoutubeMiniPlayer.SWIPE_ANIMATION_DURATION))
                 }
             }
         },
@@ -77,10 +86,10 @@ fun YoutubeMiniPlayer(
         BackHandler(onBack = {
             coroutineScope.launch {
                 withContext(Dispatchers.IO) {
-                    swipeableState.animateTo(0, tween(durationMillis = 500))
+                    swipeableState.animateTo(0, tween(durationMillis = YoutubeMiniPlayer.SWIPE_ANIMATION_DURATION))
                 }
             }
         })
-        ExoPlayer()
+        ExoPlayer(videoUrl = currentSelectedVideo?.videoLinkEndPart.orEmpty())
     }
 }

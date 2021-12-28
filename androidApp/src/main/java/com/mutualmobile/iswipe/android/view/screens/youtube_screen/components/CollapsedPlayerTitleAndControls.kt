@@ -11,12 +11,15 @@ import androidx.compose.material.icons.filled.Close
 import androidx.compose.material.icons.filled.PlayArrow
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import com.mutualmobile.iswipe.android.R
 import com.mutualmobile.iswipe.android.view.screens.youtube_screen.YoutubeScreen
@@ -27,6 +30,7 @@ import org.koin.androidx.compose.get
 @Composable
 fun CollapsedPlayerTitleAndControls(youtubeViewModel: YoutubeViewModel = get()) {
     val isVideoPlaying by youtubeViewModel.isVideoPlaying.collectAsState()
+    val currentVideoItem by youtubeViewModel.currentSelectedVideoItem.collectAsState()
     Row(
         horizontalArrangement = Arrangement.SpaceBetween,
         modifier = Modifier.fillMaxWidth(),
@@ -39,8 +43,8 @@ fun CollapsedPlayerTitleAndControls(youtubeViewModel: YoutubeViewModel = get()) 
                 .height(YoutubeScreen.DRAGGABLE_CARD_MIN_HEIGHT.dp),
             verticalArrangement = Arrangement.Center
         ) {
-            YoutubeMiniPlayerText(text = "Title Title Title Title Title", style = YoutubePlayerTypography.titleMedium)
-            YoutubeMiniPlayerText(text = "Sub-Title Sub-Title Sub-Title", style = YoutubePlayerTypography.bodySmall)
+            YoutubeMiniPlayerText(text = currentVideoItem?.snippet?.title.orEmpty(), style = YoutubePlayerTypography.titleMedium)
+            YoutubeMiniPlayerText(text = currentVideoItem?.snippet?.channelTitle.orEmpty(), style = YoutubePlayerTypography.bodySmall)
         }
         Row {
             IconButton(
@@ -53,10 +57,24 @@ fun CollapsedPlayerTitleAndControls(youtubeViewModel: YoutubeViewModel = get()) 
                 }
             }
             IconButton(
-                onClick = {},
+                onClick = { youtubeViewModel.updateCurrentSelectedVideoItem(videoItem = null) },
             ) {
                 Icon(imageVector = Icons.Default.Close, contentDescription = null)
             }
         }
     }
+}
+
+@Composable
+fun YoutubeMiniPlayerText(
+    text: String,
+    style: TextStyle
+) {
+    Text(
+        text = text,
+        style = style,
+        softWrap = false,
+        maxLines = 1,
+        overflow = TextOverflow.Ellipsis
+    )
 }

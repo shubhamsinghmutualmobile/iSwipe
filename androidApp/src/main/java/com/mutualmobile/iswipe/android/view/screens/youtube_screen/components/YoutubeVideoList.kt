@@ -2,6 +2,7 @@ package com.mutualmobile.iswipe.android.view.screens.youtube_screen.components
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -16,12 +17,16 @@ import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material.CircularProgressIndicator
 import androidx.compose.material.Divider
+import androidx.compose.material.ripple.rememberRipple
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -32,11 +37,12 @@ import com.mutualmobile.iswipe.android.R
 import com.mutualmobile.iswipe.android.view.utils.isScrolledToEnd
 import com.mutualmobile.iswipe.android.viewmodels.YoutubeViewModel
 import com.mutualmobile.iswipe.data.network.models.youtube_trending_videos.Item
+import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
 import org.koin.androidx.compose.get
 
 @Composable
-fun YoutubeVideoList(youtubeViewModel: YoutubeViewModel = get()) {
+fun YoutubeVideoList(youtubeViewModel: YoutubeViewModel = get(), expandMiniPlayer: () -> Unit) {
     val listOfVideos = youtubeViewModel.listOfYoutubeVideos.collectAsState()
     val listState = rememberLazyListState()
     LazyColumn(
@@ -44,7 +50,7 @@ fun YoutubeVideoList(youtubeViewModel: YoutubeViewModel = get()) {
         modifier = Modifier.fillMaxSize(),
         content = {
             listOfVideos.value.distinctBy { it.videoLinkEndPart }.forEach { video ->
-                item { YoutubeVideoCard(video) }
+                item { YoutubeVideoCard(video = video, expandMiniPlayer = expandMiniPlayer) }
             }
             if (listState.isScrolledToEnd()) {
                 item { LoadingIndicator(listState) }
@@ -77,11 +83,17 @@ private fun LoadingIndicator(listState: LazyListState) {
 }
 
 @Composable
-private fun YoutubeVideoCard(video: Item) {
+private fun YoutubeVideoCard(video: Item, youtubeViewModel: YoutubeViewModel = get(), expandMiniPlayer: () -> Unit) {
+    val interactionSource by remember { mutableStateOf(MutableInteractionSource()) }
+    val iconInteractionSource by remember { mutableStateOf(MutableInteractionSource()) }
     Column(
-        modifier = Modifier
-            .fillMaxSize()
-            .clickable {}
+        modifier = Modifier.clickable(
+            interactionSource = interactionSource,
+            indication = rememberRipple()
+        ) {
+            youtubeViewModel.updateCurrentSelectedVideoItem(videoItem = video)
+            expandMiniPlayer()
+        }
     ) {
         Divider(
             thickness = 6.dp,
@@ -117,7 +129,12 @@ private fun YoutubeVideoCard(video: Item) {
             Icon(
                 painter = painterResource(id = R.drawable.ic_more),
                 contentDescription = null,
-                modifier = Modifier.size(18.dp)
+                modifier = Modifier
+                    .size(18.dp)
+                    .clickable(
+                        interactionSource = iconInteractionSource,
+                        indication = rememberRipple(bounded = false)
+                    ) {}
             )
         }
         Row(

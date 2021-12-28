@@ -14,15 +14,18 @@ import io.ktor.http.HttpStatusCode
 import io.ktor.http.headersOf
 import io.ktor.utils.io.ByteReadChannel
 import kotlinx.coroutines.delay
+import kotlinx.serialization.ExperimentalSerializationApi
 import org.koin.core.context.startKoin
 import org.koin.dsl.KoinAppDeclaration
 import org.koin.dsl.module
 
+@ExperimentalSerializationApi
 fun initKoin(appDeclaration: KoinAppDeclaration = {}) = startKoin {
     appDeclaration()
     modules(network)
 }
 
+@ExperimentalSerializationApi
 fun initKoin() = initKoin {}
 
 // Useful while testing
@@ -39,6 +42,7 @@ val mockYoutubeHttpClient = HttpClient(
     }
 )
 
+@ExperimentalSerializationApi
 val network = module {
     single { NetworkModule(mockYoutubeHttpClient) }
     single<WeatherAPI> { WeatherAPIImpl(get()) }

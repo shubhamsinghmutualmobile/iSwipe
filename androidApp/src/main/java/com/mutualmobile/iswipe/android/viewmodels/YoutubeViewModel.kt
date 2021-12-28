@@ -32,6 +32,9 @@ class YoutubeViewModel constructor(
     private val _isCardTouched: MutableStateFlow<Boolean> = MutableStateFlow(value = false)
     val isCardTouched: StateFlow<Boolean> = _isCardTouched.asStateFlow()
 
+    private val _currentSelectedVideoItem: MutableStateFlow<Item?> = MutableStateFlow(null)
+    val currentSelectedVideoItem: StateFlow<Item?> = _currentSelectedVideoItem.asStateFlow()
+
     init {
         getCurrentYoutubeResponse()
     }
@@ -120,6 +123,14 @@ class YoutubeViewModel constructor(
         viewModelScope.launch {
             withContext(Dispatchers.IO) {
                 _isCardTouched.emit(!isCardTouched)
+            }
+        }
+    }
+
+    fun updateCurrentSelectedVideoItem(videoItem: Item?) {
+        viewModelScope.launch {
+            withContext(Dispatchers.IO) {
+                _currentSelectedVideoItem.emit(videoItem)
             }
         }
     }

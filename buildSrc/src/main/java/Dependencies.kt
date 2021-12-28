@@ -36,7 +36,7 @@ object AndroidLibs {
         "io.insert-koin:koin-androidx-compose:${AndroidPluginVersions.koin}",
         "androidx.core:core-splashscreen:${AndroidPluginVersions.splashScreen}",
         "io.coil-kt:coil-compose:${AndroidPluginVersions.coil}",
-        "com.google.android.exoplayer:exoplayer:${AndroidPluginVersions.exoPlayer}"
+        "com.google.android.exoplayer:exoplayer:${AndroidPluginVersions.exoPlayer}",
     )
     val androidTestImplementations = listOf(
         "androidx.compose.ui:ui-test-junit4:${AndroidPluginVersions.compose}",
