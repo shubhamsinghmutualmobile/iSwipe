@@ -11,14 +11,13 @@ import androidx.compose.material.Card
 import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material.FractionalThreshold
 import androidx.compose.material.SwipeableState
-import androidx.compose.material.rememberSwipeableState
 import androidx.compose.material.swipeable
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.unit.dp
@@ -68,7 +67,7 @@ fun YoutubeMiniPlayer(
             )
             .height(swipeableState.offset.value.dp),
         shape = RoundedCornerShape(0),
-        backgroundColor = Color.Transparent,
+        backgroundColor = MaterialTheme.colorScheme.surface,
         onClick = {
             youtubeViewModel.toggleIsCardTouched(isCardTouched)
             coroutineScope.launch {
