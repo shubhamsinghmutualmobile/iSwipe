@@ -18,6 +18,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -30,6 +31,7 @@ import com.google.accompanist.insets.navigationBarsPadding
 import com.mutualmobile.iswipe.android.R
 import com.mutualmobile.iswipe.android.view.utils.isScrolledToEnd
 import com.mutualmobile.iswipe.android.viewmodels.YoutubeViewModel
+import com.mutualmobile.iswipe.data.states.ResponseState
 import kotlinx.coroutines.launch
 import org.koin.androidx.compose.get
 
@@ -40,8 +42,9 @@ fun YoutubeVideoList(
     nestedScrollConnection: NestedScrollConnection,
     toolbarHeight: Dp
 ) {
-    val listOfVideos = youtubeViewModel.listOfYoutubeVideos.collectAsState()
+    val listOfVideos by youtubeViewModel.listOfYoutubeVideos.collectAsState()
     val listState = rememberLazyListState()
+    val response by youtubeViewModel.currentYoutubeResponse.collectAsState()
     LazyColumn(
         state = listState,
         modifier = Modifier
@@ -49,12 +52,12 @@ fun YoutubeVideoList(
             .nestedScroll(nestedScrollConnection),
         content = {
             item { Spacer(modifier = Modifier.height(toolbarHeight)) }
-            listOfVideos.value.distinctBy { it.videoLinkEndPart }.forEach { video ->
+            listOfVideos.distinctBy { it.videoLinkEndPart }.forEach { video ->
                 item { YoutubeVideoCard(video = video, expandMiniPlayer = expandMiniPlayer) }
             }
             item {
-                AnimatedVisibility(visible = listState.isScrolledToEnd()) {
-                    LoadingIndicator(listState, toolbarHeight)
+                AnimatedVisibility(visible = listState.isScrolledToEnd() && response !is ResponseState.Loading) {
+                    LoadingIndicator(listState)
                 }
             }
             if (listState.isScrolledToEnd()) {
@@ -65,18 +68,17 @@ fun YoutubeVideoList(
 }
 
 @Composable
-private fun LoadingIndicator(listState: LazyListState, toolbarHeight: Dp) {
+private fun LoadingIndicator(listState: LazyListState) {
     val coroutineScope = rememberCoroutineScope()
     Box(
         contentAlignment = Alignment.Center,
         modifier = Modifier
             .navigationBarsPadding()
             .fillMaxWidth()
-            .padding(bottom = toolbarHeight)
     ) {
         LaunchedEffect(Unit) {
             coroutineScope.launch {
-                listState.animateScrollToItem(listState.layoutInfo.totalItemsCount + 1)
+                listState.animateScrollToItem(listState.layoutInfo.totalItemsCount)
             }
         }
         CircularProgressIndicator(

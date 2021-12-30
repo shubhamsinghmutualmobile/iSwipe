@@ -4,6 +4,7 @@ import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material.CircularProgressIndicator
 import androidx.compose.material.ExperimentalMaterialApi
@@ -49,7 +50,7 @@ object YoutubeScreen {
 fun YoutubeScreen(
     youtubeViewModel: YoutubeViewModel = get()
 ) {
-    val currentVideoStreamLink by youtubeViewModel.currentVideoStreamLink.collectAsState()
+    val currentYoutubeChannelBasic by youtubeViewModel.currentYoutubeChannelBasic.collectAsState()
     val isCardExpanded by youtubeViewModel.isCardExpanded.collectAsState()
     val response = youtubeViewModel.currentYoutubeResponse.collectAsState()
     val isRefreshing = rememberSwipeRefreshState(isRefreshing = response.value is ResponseState.Loading)
@@ -83,9 +84,9 @@ fun YoutubeScreen(
     Scaffold(
         bottomBar = {
             AnimatedVisibility(
-                visible = currentVideoStreamLink != null
+                visible = currentYoutubeChannelBasic != null
             ) {
-                currentVideoStreamLink?.let { nnCurrentVideoStreamLink ->
+                currentYoutubeChannelBasic?.streamLink?.let { nnCurrentVideoStreamLink ->
                     YoutubeMiniPlayer(
                         swipeableState = miniPlayerSwipeableState,
                         videoStreamLink = nnCurrentVideoStreamLink
@@ -100,10 +101,11 @@ fun YoutubeScreen(
             state = isRefreshing,
             onRefresh = {
                 with(youtubeViewModel) {
-//                clearYoutubeList()
+                    clearYoutubeList()
                     getCurrentYoutubeResponse()
                 }
-            }
+            },
+            indicatorPadding = PaddingValues(bottom = toolbarHeight * 1.5f)
         ) {
             Box(
                 modifier = Modifier.fillMaxSize(),
@@ -123,7 +125,9 @@ fun YoutubeScreen(
                         Text("")
                     }
                     is ResponseState.Loading -> {
-                        CircularProgressIndicator()
+                        CircularProgressIndicator(
+                            color = MaterialTheme.colorScheme.primary
+                        )
                     }
                     is ResponseState.Success -> {}
                     is ResponseState.Failure -> {

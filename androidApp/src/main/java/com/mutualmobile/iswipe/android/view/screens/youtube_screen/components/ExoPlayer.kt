@@ -29,11 +29,6 @@ import com.mutualmobile.iswipe.android.viewmodels.YoutubeViewModel
 import kotlinx.coroutines.delay
 import org.koin.androidx.compose.get
 
-object ExoPlayer {
-    const val PLAYER_BUTTON_SIZE = 32
-    const val PLAYER_BUTTON_PADDING = 4
-}
-
 @Composable
 fun ExoPlayer(
     youtubeViewModel: YoutubeViewModel = get(),
@@ -102,5 +97,6 @@ fun ExoPlayer(
         }
         ExpandedPlayerTitleRow()
         ExpandedPlayerActionRow()
+        ExpandedPlayerChannelRow()
     }
 }

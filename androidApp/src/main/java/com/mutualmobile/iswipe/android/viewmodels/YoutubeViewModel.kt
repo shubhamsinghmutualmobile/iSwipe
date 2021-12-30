@@ -5,6 +5,7 @@ import androidx.lifecycle.viewModelScope
 import com.mutualmobile.iswipe.data.network.apis.YoutubeAPI
 import com.mutualmobile.iswipe.data.network.models.youtube_trending_videos.Item
 import com.mutualmobile.iswipe.data.network.models.youtube_trending_videos.YoutubeTrendingVideosResponse
+import com.mutualmobile.iswipe.data.network.models.youtube_trending_videos.local.YoutubeChannelBasic
 import com.mutualmobile.iswipe.data.network.utils.NetworkUtils
 import com.mutualmobile.iswipe.data.states.ResponseState
 import kotlinx.coroutines.Dispatchers
@@ -17,6 +18,8 @@ import kotlinx.coroutines.withContext
 import org.schabi.newpipe.extractor.services.youtube.YoutubeService
 
 const val YOUTUBE_BASE_URL = "https://www.youtube.com/watch?v="
+const val YOUTUBE_CHANNEL_BASE_URL = "https://www.youtube.com/channel/"
+private const val TAG = "YoutubeViewModel"
 
 class YoutubeViewModel constructor(
     private val youtubeApi: YoutubeAPI
@@ -39,8 +42,8 @@ class YoutubeViewModel constructor(
     private val _currentSelectedVideoItem: MutableStateFlow<Item?> = MutableStateFlow(null)
     val currentSelectedVideoItem: StateFlow<Item?> = _currentSelectedVideoItem.asStateFlow()
 
-    private val _currentVideoStreamLink: MutableStateFlow<String?> = MutableStateFlow(null)
-    val currentVideoStreamLink: StateFlow<String?> = _currentVideoStreamLink.asStateFlow()
+    private val _currentYoutubeChannelBasic: MutableStateFlow<YoutubeChannelBasic?> = MutableStateFlow(null)
+    val currentYoutubeChannelBasic: StateFlow<YoutubeChannelBasic?> = _currentYoutubeChannelBasic.asStateFlow()
 
     init {
         getCurrentYoutubeResponse()
@@ -148,13 +151,23 @@ class YoutubeViewModel constructor(
             withContext(Dispatchers.IO) {
                 _currentSelectedVideoItem.collectLatest { item ->
                     item?.let { nnItem ->
-                        val completeUrl = YOUTUBE_BASE_URL + nnItem.videoLinkEndPart
-                        _currentVideoStreamLink.emit(
-                            YoutubeService(0).getStreamExtractor(completeUrl).apply {
-                                fetchPage()
-                            }.videoStreams[2].url
+                        val completeVideoUrl = YOUTUBE_BASE_URL + nnItem.videoLinkEndPart
+                        val completeChannelUrl = YOUTUBE_CHANNEL_BASE_URL + nnItem.snippet?.channelId
+
+                        val youtubeService = YoutubeService(0)
+
+                        val linkDetails = youtubeService.getStreamExtractor(completeVideoUrl).apply { fetchPage() }
+                        val channelDetails = youtubeService.getChannelExtractor(completeChannelUrl).apply { fetchPage() }
+
+                        val channelToEmit = YoutubeChannelBasic(
+                            streamLink = linkDetails.videoStreams[2].url,
+                            channelAvatarUrl = linkDetails.uploaderAvatarUrl,
+                            subscriberCount = channelDetails.subscriberCount.toString(),
+                            channelName = channelDetails.name
                         )
-                    } ?: _currentVideoStreamLink.emit(null)
+
+                        _currentYoutubeChannelBasic.emit(channelToEmit)
+                    } ?: _currentYoutubeChannelBasic.emit(null)
                 }
             }
         }

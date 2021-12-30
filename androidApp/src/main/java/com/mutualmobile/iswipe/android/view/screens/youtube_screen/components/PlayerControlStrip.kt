@@ -24,6 +24,11 @@ import com.mutualmobile.iswipe.android.R
 import com.mutualmobile.iswipe.android.viewmodels.YoutubeViewModel
 import org.koin.androidx.compose.get
 
+private object PlayerControlStrip {
+    const val PLAYER_BUTTON_SIZE = 48
+    const val PLAYER_BUTTON_PADDING = 32
+}
+
 @Composable
 fun PlayerControlStrip(
     exoPlayer: com.google.android.exoplayer2.ExoPlayer,
@@ -38,14 +43,19 @@ fun PlayerControlStrip(
         enter = fadeIn(),
         exit = fadeOut()
     ) {
-        Row(horizontalArrangement = Arrangement.Center, verticalAlignment = Alignment.CenterVertically) {
-            IconButton(onClick = { exoPlayer.seekBack() }) {
+        Row(
+            horizontalArrangement = Arrangement.Center,
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            IconButton(
+                onClick = { exoPlayer.seekBack() },
+                modifier = Modifier.padding(end = PlayerControlStrip.PLAYER_BUTTON_PADDING.dp)
+            ) {
                 Icon(
                     Icons.Default.KeyboardArrowLeft,
                     null,
                     modifier = Modifier
-                        .size(ExoPlayer.PLAYER_BUTTON_SIZE.dp)
-                        .padding(end = ExoPlayer.PLAYER_BUTTON_PADDING.dp)
+                        .size(PlayerControlStrip.PLAYER_BUTTON_SIZE.dp)
                 )
             }
             if (isVideoPlaying) {
@@ -58,7 +68,7 @@ fun PlayerControlStrip(
                     Icon(
                         painter = painterResource(id = R.drawable.ic_pause),
                         contentDescription = null,
-                        modifier = Modifier.size(ExoPlayer.PLAYER_BUTTON_SIZE.dp)
+                        modifier = Modifier.size(PlayerControlStrip.PLAYER_BUTTON_SIZE.dp)
                     )
                 }
             } else {
@@ -71,17 +81,19 @@ fun PlayerControlStrip(
                     Icon(
                         imageVector = Icons.Default.PlayArrow,
                         contentDescription = null,
-                        modifier = Modifier.size(ExoPlayer.PLAYER_BUTTON_SIZE.dp)
+                        modifier = Modifier.size(PlayerControlStrip.PLAYER_BUTTON_SIZE.dp)
                     )
                 }
             }
-            IconButton(onClick = { exoPlayer.seekForward() }) {
+            IconButton(
+                onClick = { exoPlayer.seekForward() },
+                modifier = Modifier.padding(start = PlayerControlStrip.PLAYER_BUTTON_PADDING.dp)
+            ) {
                 Icon(
                     Icons.Default.KeyboardArrowRight,
                     null,
                     modifier = Modifier
-                        .size(ExoPlayer.PLAYER_BUTTON_SIZE.dp)
-                        .padding(start = ExoPlayer.PLAYER_BUTTON_PADDING.dp)
+                        .size(PlayerControlStrip.PLAYER_BUTTON_SIZE.dp)
                 )
             }
         }
