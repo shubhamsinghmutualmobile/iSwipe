@@ -102,6 +102,5 @@ object CommonTestVersions {
 object CommonTestDependencies {
     val implementations = listOf(
         "io.insert-koin:koin-test:${CommonTestVersions.koin}",
-        "io.insert-koin:koin-test-junit4:${CommonTestVersions.koin}",
     )
 }

@@ -73,7 +73,8 @@ class YoutubeViewModelTest : KoinTest {
         runBlocking {
             launch {
                 youtubeViewModel.currentYoutubeResponse.test {
-                    awaitItem() // Because getCurrentYoutubeResponse() will first emit Loading state
+                    awaitItem() // Empty state
+                    awaitItem() // Loading state
                     val result = awaitItem()
                     assert(result is ResponseState.Success)
                     assert((result as ResponseState.Success).data.etag == "Wk9jiFfuS_n0gU6tPEvmyWtCrBQ")

@@ -38,11 +38,15 @@ fun ExpandedPlayerTitleRow(youtubeViewModel: YoutubeViewModel = get()) {
             horizontalArrangement = Arrangement.SpaceBetween,
             modifier = Modifier.fillMaxWidth()
         ) {
-            Text(currentVideoItem?.snippet?.title.orEmpty(), style = YoutubePlayerTypography.titleLarge)
+            Text(
+                currentVideoItem?.snippet?.title.orEmpty(),
+                style = YoutubePlayerTypography.titleLarge,
+                modifier = Modifier.fillMaxWidth(0.8f)
+            )
             Icon(imageVector = Icons.Outlined.ArrowDropDown, contentDescription = null)
         }
         Text(
-            "${ currentVideoItem?.statistics?.viewCount } views . ${ currentVideoItem?.snippet?.publishedAt } ago",
+            "${currentVideoItem?.statistics?.viewCount} views . ${currentVideoItem?.snippet?.publishedAt} ago",
             style = YoutubePlayerTypography.bodySmall,
             color = MaterialTheme.colorScheme.onSurface.copy(0.75f),
             modifier = Modifier.padding(top = 4.dp)

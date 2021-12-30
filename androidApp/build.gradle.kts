@@ -37,7 +37,6 @@ android {
 
 dependencies {
     implementation(project(":shared"))
-    implementation(files("libs/YouTubeAndroidPlayerApi.jar"))
     AndroidLibs.implementations.forEach(::implementation)
     AndroidLibs.testImplementations.forEach(::testImplementation)
     AndroidLibs.androidTestImplementations.forEach(::androidTestImplementation)
