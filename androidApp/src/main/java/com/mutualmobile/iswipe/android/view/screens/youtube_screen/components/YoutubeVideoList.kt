@@ -1,5 +1,6 @@
 package com.mutualmobile.iswipe.android.view.screens.youtube_screen.components
 
+import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
@@ -25,6 +26,7 @@ import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
+import com.google.accompanist.insets.navigationBarsPadding
 import com.mutualmobile.iswipe.android.R
 import com.mutualmobile.iswipe.android.view.utils.isScrolledToEnd
 import com.mutualmobile.iswipe.android.viewmodels.YoutubeViewModel
@@ -50,8 +52,12 @@ fun YoutubeVideoList(
             listOfVideos.value.distinctBy { it.videoLinkEndPart }.forEach { video ->
                 item { YoutubeVideoCard(video = video, expandMiniPlayer = expandMiniPlayer) }
             }
+            item {
+                AnimatedVisibility(visible = listState.isScrolledToEnd()) {
+                    LoadingIndicator(listState, toolbarHeight)
+                }
+            }
             if (listState.isScrolledToEnd()) {
-                item { LoadingIndicator(listState) }
                 youtubeViewModel.addNewItemsToList()
             }
         }
@@ -59,13 +65,14 @@ fun YoutubeVideoList(
 }
 
 @Composable
-private fun LoadingIndicator(listState: LazyListState) {
+private fun LoadingIndicator(listState: LazyListState, toolbarHeight: Dp) {
     val coroutineScope = rememberCoroutineScope()
     Box(
         contentAlignment = Alignment.Center,
         modifier = Modifier
+            .navigationBarsPadding()
             .fillMaxWidth()
-            .padding(bottom = 16.dp)
+            .padding(bottom = toolbarHeight)
     ) {
         LaunchedEffect(Unit) {
             coroutineScope.launch {
