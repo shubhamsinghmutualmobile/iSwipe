@@ -16,11 +16,16 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import com.mutualmobile.iswipe.android.view.theme.YoutubePlayerTypography
 import com.mutualmobile.iswipe.android.viewmodels.YoutubeViewModel
 import org.koin.androidx.compose.get
+
+private object ExpandedPlayerTitleRow {
+    const val TEXT_PADDING_TOP = 4
+}
 
 @Composable
 fun ExpandedPlayerTitleRow(youtubeViewModel: YoutubeViewModel = get()) {
@@ -45,11 +50,22 @@ fun ExpandedPlayerTitleRow(youtubeViewModel: YoutubeViewModel = get()) {
             )
             Icon(imageVector = Icons.Outlined.ArrowDropDown, contentDescription = null)
         }
-        Text(
-            "${currentVideoItem?.statistics?.viewCount} views . ${currentVideoItem?.snippet?.publishedAt} ago",
-            style = YoutubePlayerTypography.bodySmall,
-            color = MaterialTheme.colorScheme.onSurface.copy(0.75f),
-            modifier = Modifier.padding(top = 4.dp)
-        )
+        Row(
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            Text(
+                "${currentVideoItem?.statistics?.viewCount} views ",
+                style = YoutubePlayerTypography.bodySmall,
+                color = MaterialTheme.colorScheme.onSurface.copy(0.75f),
+                modifier = Modifier.padding(top = ExpandedPlayerTitleRow.TEXT_PADDING_TOP.dp)
+            )
+            YoutubeCaptionDotDivider(paddingTop = ExpandedPlayerTitleRow.TEXT_PADDING_TOP.dp)
+            Text(
+                " ${currentVideoItem?.snippet?.publishedAt} ago",
+                style = YoutubePlayerTypography.bodySmall,
+                color = MaterialTheme.colorScheme.onSurface.copy(0.75f),
+                modifier = Modifier.padding(top = ExpandedPlayerTitleRow.TEXT_PADDING_TOP.dp)
+            )
+        }
     }
 }

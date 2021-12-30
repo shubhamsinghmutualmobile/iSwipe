@@ -91,11 +91,13 @@ private fun LoadingIndicator(listState: LazyListState) {
 }
 
 @Composable
-fun YoutubeCaptionDotDivider() {
+fun YoutubeCaptionDotDivider(paddingTop: Dp = 0.dp) {
     Icon(
         painterResource(id = R.drawable.ic_dot),
         contentDescription = null,
-        modifier = Modifier.size(2.dp),
+        modifier = Modifier
+            .padding(top = paddingTop)
+            .size(2.dp),
         tint = MaterialTheme.colorScheme.onSurface
     )
 }

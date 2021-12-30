@@ -76,9 +76,9 @@ fun YoutubeScreen(
     }
 
     if (isCardExpanded) {
-        systemUiController.setSystemBarsColor(color = MaterialTheme.colorScheme.surface, darkIcons = !isSystemInDarkTheme())
+        systemUiController.setStatusBarColor(color = MaterialTheme.colorScheme.surface, darkIcons = !isSystemInDarkTheme())
     } else {
-        systemUiController.setSystemBarsColor(color = Color.Transparent, darkIcons = !isSystemInDarkTheme())
+        systemUiController.setStatusBarColor(color = Color.Transparent, darkIcons = !isSystemInDarkTheme())
     }
 
     Scaffold(
