@@ -101,5 +101,6 @@ fun ExoPlayer(
             )
         }
         ExpandedPlayerTitleRow()
+        ExpandedPlayerActionRow()
     }
 }
