@@ -8,7 +8,12 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.width
+import androidx.compose.material.BottomSheetScaffold
+import androidx.compose.material.BottomSheetValue
+import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material.LinearProgressIndicator
+import androidx.compose.material.rememberBottomSheetScaffoldState
+import androidx.compose.material.rememberBottomSheetState
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -16,10 +21,13 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.unit.dp
 import androidx.compose.ui.viewinterop.AndroidView
 import com.google.android.exoplayer2.MediaItem
 import com.google.android.exoplayer2.source.ProgressiveMediaSource
@@ -27,8 +35,10 @@ import com.google.android.exoplayer2.ui.PlayerView
 import com.google.android.exoplayer2.upstream.DefaultDataSource
 import com.mutualmobile.iswipe.android.viewmodels.YoutubeViewModel
 import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 import org.koin.androidx.compose.get
 
+@OptIn(ExperimentalMaterialApi::class)
 @Composable
 fun ExoPlayer(
     youtubeViewModel: YoutubeViewModel = get(),
@@ -38,6 +48,11 @@ fun ExoPlayer(
     val isCardExpanded by youtubeViewModel.isCardExpanded.collectAsState()
 
     val context = LocalContext.current
+
+    val bottomSheetScaffoldState = rememberBottomSheetScaffoldState(
+        bottomSheetState = rememberBottomSheetState(initialValue = BottomSheetValue.Expanded)
+    )
+    val coroutineScope = rememberCoroutineScope()
 
     val exoPlayer by remember {
         mutableStateOf(
@@ -57,6 +72,9 @@ fun ExoPlayer(
 
     LaunchedEffect(Unit) {
         while (true) {
+            if (!isCardExpanded) {
+                coroutineScope.launch { bottomSheetScaffoldState.bottomSheetState.collapse() }
+            }
             currentVideoProgress = (exoPlayer.currentPosition.toFloat() / exoPlayer.contentDuration)
             delay(1000)
         }
@@ -68,35 +86,45 @@ fun ExoPlayer(
         exoPlayer.pause()
     }
 
-    Column {
-        Box(
-            contentAlignment = Alignment.BottomStart
-        ) {
-            Row {
-                BoxWithConstraints(contentAlignment = Alignment.Center) {
-                    AndroidView(
-                        modifier = Modifier
-                            .height(height = if (isCardExpanded) maxHeight / 3 else maxHeight)
-                            .width(width = if (isCardExpanded) maxWidth else maxWidth / 3),
-                        factory = { exoplayerContext ->
-                            PlayerView(exoplayerContext).apply {
-                                player = exoPlayer
-                                useController = false
+    BottomSheetScaffold(
+        scaffoldState = bottomSheetScaffoldState,
+        sheetPeekHeight = 0.dp,
+        sheetContent = {
+            YoutubeDescriptionSheet(bottomSheetScaffoldState)
+        },
+        backgroundColor = Color.Transparent,
+        sheetBackgroundColor = Color.Transparent,
+    ) {
+        Column {
+            Box(
+                contentAlignment = Alignment.BottomStart
+            ) {
+                Row {
+                    BoxWithConstraints(contentAlignment = Alignment.Center) {
+                        AndroidView(
+                            modifier = Modifier
+                                .height(height = if (isCardExpanded) maxHeight / 3 else maxHeight)
+                                .width(width = if (isCardExpanded) maxWidth else maxWidth / 3),
+                            factory = { exoplayerContext ->
+                                PlayerView(exoplayerContext).apply {
+                                    player = exoPlayer
+                                    useController = false
+                                }
                             }
-                        }
-                    )
-                    PlayerControlStrip(exoPlayer)
+                        )
+                        PlayerControlStrip(exoPlayer)
+                    }
+                    CollapsedPlayerTitleAndControls()
                 }
-                CollapsedPlayerTitleAndControls()
+                LinearProgressIndicator(
+                    progress = currentVideoProgress,
+                    modifier = Modifier.fillMaxWidth(),
+                    color = MaterialTheme.colorScheme.primary
+                )
             }
-            LinearProgressIndicator(
-                progress = currentVideoProgress,
-                modifier = Modifier.fillMaxWidth(),
-                color = MaterialTheme.colorScheme.primary
-            )
+            ExpandedPlayerTitleRow(bottomSheetScaffoldState = bottomSheetScaffoldState)
+            ExpandedPlayerActionRow()
+            ExpandedPlayerChannelRow()
         }
-        ExpandedPlayerTitleRow()
-        ExpandedPlayerActionRow()
-        ExpandedPlayerChannelRow()
     }
 }
