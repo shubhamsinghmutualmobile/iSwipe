@@ -14,6 +14,7 @@ object AndroidPluginVersions {
     const val splashScreen = "1.0.0-alpha02"
     const val coil = "1.4.0"
     const val exoPlayer = "2.16.1"
+    const val newpipeYoutubeExtractor = "0.21.12"
 }
 
 object AndroidLibs {
@@ -37,6 +38,12 @@ object AndroidLibs {
         "androidx.core:core-splashscreen:${AndroidPluginVersions.splashScreen}",
         "io.coil-kt:coil-compose:${AndroidPluginVersions.coil}",
         "com.google.android.exoplayer:exoplayer:${AndroidPluginVersions.exoPlayer}",
+        "com.github.TeamNewPipe:NewPipeExtractor:${AndroidPluginVersions.newpipeYoutubeExtractor}",
+        "io.ktor:ktor-client-android:${AndroidPluginVersions.ktor}",
+        "io.ktor:ktor-client-core:${AndroidPluginVersions.ktor}",
+        "io.ktor:ktor-client-cio:${AndroidPluginVersions.ktor}",
+        "com.squareup.okhttp3:okhttp:4.9.0",
+        "androidx.preference:preference:1.2.0-rc01"
     )
     val androidTestImplementations = listOf(
         "androidx.compose.ui:ui-test-junit4:${AndroidPluginVersions.compose}",

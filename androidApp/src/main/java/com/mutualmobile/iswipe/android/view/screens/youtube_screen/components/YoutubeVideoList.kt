@@ -37,7 +37,7 @@ import com.mutualmobile.iswipe.android.R
 import com.mutualmobile.iswipe.android.view.utils.isScrolledToEnd
 import com.mutualmobile.iswipe.android.viewmodels.YoutubeViewModel
 import com.mutualmobile.iswipe.data.network.models.youtube_trending_videos.Item
-import kotlinx.coroutines.Job
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import org.koin.androidx.compose.get
 
@@ -86,13 +86,21 @@ private fun LoadingIndicator(listState: LazyListState) {
 private fun YoutubeVideoCard(video: Item, youtubeViewModel: YoutubeViewModel = get(), expandMiniPlayer: () -> Unit) {
     val interactionSource by remember { mutableStateOf(MutableInteractionSource()) }
     val iconInteractionSource by remember { mutableStateOf(MutableInteractionSource()) }
+    val coroutineScope = rememberCoroutineScope()
     Column(
         modifier = Modifier.clickable(
             interactionSource = interactionSource,
             indication = rememberRipple()
         ) {
-            youtubeViewModel.updateCurrentSelectedVideoItem(videoItem = video)
-            expandMiniPlayer()
+            coroutineScope.launch {
+                youtubeViewModel.toggleIsVideoPlaying(isVideoPlaying = true)
+                delay(100)
+                youtubeViewModel.updateCurrentSelectedVideoItem(videoItem = null)
+                delay(100)
+                youtubeViewModel.updateCurrentSelectedVideoItem(videoItem = video)
+                expandMiniPlayer()
+                youtubeViewModel.toggleIsVideoPlaying(isVideoPlaying = false)
+            }
         }
     ) {
         Divider(

@@ -11,8 +11,12 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import org.schabi.newpipe.extractor.services.youtube.YoutubeService
+
+const val YOUTUBE_BASE_URL = "https://www.youtube.com/watch?v="
 
 class YoutubeViewModel constructor(
     private val youtubeApi: YoutubeAPI
@@ -35,8 +39,12 @@ class YoutubeViewModel constructor(
     private val _currentSelectedVideoItem: MutableStateFlow<Item?> = MutableStateFlow(null)
     val currentSelectedVideoItem: StateFlow<Item?> = _currentSelectedVideoItem.asStateFlow()
 
+    private val _currentVideoStreamLink: MutableStateFlow<String?> = MutableStateFlow(null)
+    val currentVideoStreamLink: StateFlow<String?> = _currentVideoStreamLink.asStateFlow()
+
     init {
         getCurrentYoutubeResponse()
+        getStreamLinkFromYouTubeId()
     }
 
     fun getCurrentYoutubeResponse(getNextPage: Boolean = false) {
@@ -131,6 +139,23 @@ class YoutubeViewModel constructor(
         viewModelScope.launch {
             withContext(Dispatchers.IO) {
                 _currentSelectedVideoItem.emit(videoItem)
+            }
+        }
+    }
+
+    private fun getStreamLinkFromYouTubeId() {
+        viewModelScope.launch {
+            withContext(Dispatchers.IO) {
+                _currentSelectedVideoItem.collectLatest { item ->
+                    item?.let { nnItem ->
+                        val completeUrl = YOUTUBE_BASE_URL + nnItem.videoLinkEndPart
+                        _currentVideoStreamLink.emit(
+                            YoutubeService(0).getStreamExtractor(completeUrl).apply {
+                                fetchPage()
+                            }.videoStreams[2].url
+                        )
+                    } ?: _currentVideoStreamLink.emit(null)
+                }
             }
         }
     }

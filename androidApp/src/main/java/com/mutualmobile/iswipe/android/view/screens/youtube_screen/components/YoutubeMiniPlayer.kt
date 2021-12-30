@@ -39,12 +39,11 @@ object YoutubeMiniPlayer {
 @Composable
 fun YoutubeMiniPlayer(
     youtubeViewModel: YoutubeViewModel = get(),
-    expandMiniPlayer: (swipeableState: SwipeableState<Int>) -> Unit
+    swipeableState: SwipeableState<Int>,
+    videoStreamLink: String
 ) {
-    val currentSelectedVideo by youtubeViewModel.currentSelectedVideoItem.collectAsState()
     val isCardTouched by youtubeViewModel.isCardTouched.collectAsState()
     val coroutineScope = rememberCoroutineScope()
-    val swipeableState = rememberSwipeableState(initialValue = 0)
     val screenHeightDp = with(LocalDensity.current) {
         (
             LocalConfiguration.current.screenHeightDp.toDp() - rememberInsetsPaddingValues(
@@ -55,8 +54,6 @@ fun YoutubeMiniPlayer(
     val anchors = mapOf(0f to 0, screenHeightDp to 1)
 
     youtubeViewModel.setIsCardExpanded(swipeableState.currentValue == 1)
-
-    expandMiniPlayer(swipeableState)
 
     Card(
         modifier = Modifier
@@ -90,6 +87,6 @@ fun YoutubeMiniPlayer(
                 }
             }
         })
-        ExoPlayer(videoUrl = currentSelectedVideo?.videoLinkEndPart.orEmpty())
+        ExoPlayer(videoUrl = videoStreamLink)
     }
 }

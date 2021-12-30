@@ -15,6 +15,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
@@ -25,12 +26,15 @@ import com.mutualmobile.iswipe.android.R
 import com.mutualmobile.iswipe.android.view.screens.youtube_screen.YoutubeScreen
 import com.mutualmobile.iswipe.android.view.theme.YoutubePlayerTypography
 import com.mutualmobile.iswipe.android.viewmodels.YoutubeViewModel
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 import org.koin.androidx.compose.get
 
 @Composable
 fun CollapsedPlayerTitleAndControls(youtubeViewModel: YoutubeViewModel = get()) {
     val isVideoPlaying by youtubeViewModel.isVideoPlaying.collectAsState()
     val currentVideoItem by youtubeViewModel.currentSelectedVideoItem.collectAsState()
+    val coroutineScope = rememberCoroutineScope()
     Row(
         horizontalArrangement = Arrangement.SpaceBetween,
         modifier = Modifier.fillMaxWidth(),
@@ -57,7 +61,15 @@ fun CollapsedPlayerTitleAndControls(youtubeViewModel: YoutubeViewModel = get()) 
                 }
             }
             IconButton(
-                onClick = { youtubeViewModel.updateCurrentSelectedVideoItem(videoItem = null) },
+                onClick = {
+                    coroutineScope.launch {
+                        youtubeViewModel.toggleIsVideoPlaying(isVideoPlaying = true)
+                        delay(100)
+                        if (!isVideoPlaying) {
+                            youtubeViewModel.updateCurrentSelectedVideoItem(videoItem = null)
+                        }
+                    }
+                },
             ) {
                 Icon(imageVector = Icons.Default.Close, contentDescription = null)
             }

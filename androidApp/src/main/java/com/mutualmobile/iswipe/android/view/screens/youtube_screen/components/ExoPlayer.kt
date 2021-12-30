@@ -2,9 +2,13 @@ package com.mutualmobile.iswipe.android.view.screens.youtube_screen.components
 
 import android.net.Uri
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.heightIn
+import androidx.compose.foundation.layout.width
 import androidx.compose.material.LinearProgressIndicator
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -16,6 +20,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.unit.dp
 import androidx.compose.ui.viewinterop.AndroidView
 import com.google.android.exoplayer2.MediaItem
 import com.google.android.exoplayer2.source.ProgressiveMediaSource
@@ -28,7 +33,6 @@ import org.koin.androidx.compose.get
 object ExoPlayer {
     const val PLAYER_BUTTON_SIZE = 32
     const val PLAYER_BUTTON_PADDING = 4
-    const val YOUTUBE_BASE_URL = "https://www.youtube.com/watch?v="
 }
 
 @Composable
@@ -37,19 +41,22 @@ fun ExoPlayer(
     videoUrl: String
 ) {
     val isVideoPlaying by youtubeViewModel.isVideoPlaying.collectAsState()
+    val isCardExpanded by youtubeViewModel.isCardExpanded.collectAsState()
 
     val context = LocalContext.current
-    val url = ExoPlayer.YOUTUBE_BASE_URL + videoUrl
-    var extractedUrl = ""
 
-    val exoPlayer = com.google.android.exoplayer2.ExoPlayer.Builder(context).build().apply {
-        val dataSourceFactory: DefaultDataSource.Factory = DefaultDataSource.Factory(context)
+    val exoPlayer by remember {
+        mutableStateOf(
+            com.google.android.exoplayer2.ExoPlayer.Builder(context).build().apply {
+                val dataSourceFactory: DefaultDataSource.Factory = DefaultDataSource.Factory(context)
 
-        val source = ProgressiveMediaSource.Factory(dataSourceFactory)
-            .createMediaSource(MediaItem.fromUri(Uri.parse(extractedUrl)))
+                val source = ProgressiveMediaSource.Factory(dataSourceFactory)
+                    .createMediaSource(MediaItem.fromUri(Uri.parse(videoUrl)))
 
-        setMediaSource(source)
-        prepare()
+                setMediaSource(source)
+                prepare()
+            }
+        )
     }
 
     var currentVideoProgress by remember { mutableStateOf(0.0f) }
@@ -72,8 +79,11 @@ fun ExoPlayer(
             contentAlignment = Alignment.BottomStart
         ) {
             Row {
-                Box(contentAlignment = Alignment.Center) {
+                BoxWithConstraints(contentAlignment = Alignment.Center) {
                     AndroidView(
+                        modifier = Modifier
+                            .height(height = if(isCardExpanded) maxHeight / 3 else maxHeight)
+                            .width(width = if(isCardExpanded) maxWidth else maxWidth / 3),
                         factory = { exoplayerContext ->
                             PlayerView(exoplayerContext).apply {
                                 player = exoPlayer
