@@ -1,17 +1,14 @@
 package com.mutualmobile.iswipe.android.view.screens.weather_screen
 
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.rememberScrollState
-import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import com.google.accompanist.insets.statusBarsPadding
 import com.google.accompanist.swiperefresh.SwipeRefresh
 import com.google.accompanist.swiperefresh.rememberSwipeRefreshState
+import com.mutualmobile.iswipe.android.view.screens.weather_screen.components.WeatherLoadingAnimation
 import com.mutualmobile.iswipe.android.viewmodels.WeatherViewModel
 import com.mutualmobile.iswipe.data.states.ResponseState
 import org.koin.androidx.compose.get
@@ -30,28 +27,19 @@ fun WeatherScreen(
         state = isRefreshing,
         onRefresh = { weatherViewModel.getCurrentWeather() }
     ) {
-        Box(
-            modifier = Modifier
-                .fillMaxSize()
-                .verticalScroll(rememberScrollState()),
-            contentAlignment = Alignment.Center
-        ) {
-            Text(
-                text = when (val result = currentWeather.value) {
-                    is ResponseState.Empty -> {
-                        ""
-                    }
-                    is ResponseState.Loading -> {
-                        "Loading weather..."
-                    }
-                    is ResponseState.Success -> {
-                        result.data.toString()
-                    }
-                    is ResponseState.Failure -> {
-                        result.errorMsg
-                    }
-                }
-            )
+        when (val result = currentWeather.value) {
+            is ResponseState.Empty -> {
+                Text("")
+            }
+            is ResponseState.Loading -> {
+                WeatherLoadingAnimation()
+            }
+            is ResponseState.Success -> {
+                Text(result.data.toString())
+            }
+            is ResponseState.Failure -> {
+                Text(result.errorMsg)
+            }
         }
     }
 }

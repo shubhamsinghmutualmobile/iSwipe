@@ -61,3 +61,12 @@ val YoutubePlayerTypography = Typography(
         letterSpacing = 0.5.sp
     ),
 )
+
+val WeatherScreenTypography = Typography(
+    labelMedium = TextStyle(
+        fontFamily = FontFamily.Default,
+        fontWeight = FontWeight.SemiBold,
+        fontSize = 14.sp,
+        lineHeight = 20.sp,
+    )
+)

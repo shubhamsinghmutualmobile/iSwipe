@@ -28,23 +28,22 @@ fun initKoin(appDeclaration: KoinAppDeclaration = {}) = startKoin {
 @ExperimentalSerializationApi
 fun initKoin() = initKoin {}
 
-// Useful while testing
-val mockYoutubeHttpClient = HttpClient(
-    MockEngine {
-        delay(2000)
-        respond(
-            content = ByteReadChannel(
-                TestNetworkUtils.YOUTUBE_VIDEOS_RESPONSE_SUCCESS.trimIndent()
-            ),
-            status = HttpStatusCode.OK,
-            headers = headersOf(HttpHeaders.ContentType, "application/json")
-        )
-    }
-)
+private fun getMockClient(response: String): HttpClient {
+    return HttpClient(
+        MockEngine {
+            delay(3000)
+            respond(
+                content = ByteReadChannel(response.trimIndent()),
+                status = HttpStatusCode.OK,
+                headers = headersOf(HttpHeaders.ContentType, "application/json")
+            )
+        }
+    )
+}
 
 @ExperimentalSerializationApi
 val network = module {
-    single { NetworkModule(mockYoutubeHttpClient) }
+    single { NetworkModule(getMockClient(TestNetworkUtils.WEATHER_RESPONSE_SUCCESS)) }
     single<WeatherAPI> { WeatherAPIImpl(get()) }
     single<YoutubeAPI> { YoutubeAPIImpl(get()) }
 }

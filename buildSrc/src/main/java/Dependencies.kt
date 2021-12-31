@@ -15,6 +15,8 @@ object AndroidPluginVersions {
     const val coil = "1.4.0"
     const val exoPlayer = "2.16.1"
     const val newpipeYoutubeExtractor = "0.21.12"
+    const val lottie = "4.2.2"
+    const val okHttp = "4.9.0"
 }
 
 object AndroidLibs {
@@ -42,8 +44,8 @@ object AndroidLibs {
         "io.ktor:ktor-client-android:${AndroidPluginVersions.ktor}",
         "io.ktor:ktor-client-core:${AndroidPluginVersions.ktor}",
         "io.ktor:ktor-client-cio:${AndroidPluginVersions.ktor}",
-        "com.squareup.okhttp3:okhttp:4.9.0",
-        "androidx.preference:preference:1.2.0-rc01"
+        "com.squareup.okhttp3:okhttp:${AndroidPluginVersions.okHttp}",
+        "com.airbnb.android:lottie-compose:${AndroidPluginVersions.lottie}"
     )
     val androidTestImplementations = listOf(
         "androidx.compose.ui:ui-test-junit4:${AndroidPluginVersions.compose}",
