@@ -84,45 +84,49 @@ fun ExoPlayer(
     } else {
         exoPlayer.pause()
     }
-
-    BottomSheetScaffold(
-        scaffoldState = bottomSheetScaffoldState,
-        sheetPeekHeight = 0.dp,
-        sheetContent = {
-            YoutubeDescriptionSheet(bottomSheetScaffoldState)
-        },
-        backgroundColor = Color.Transparent,
-        sheetBackgroundColor = Color.Transparent,
-    ) {
-        Column {
-            Box(
-                contentAlignment = Alignment.BottomStart
-            ) {
-                Row {
-                    BoxWithConstraints(contentAlignment = Alignment.Center) {
-                        AndroidView(
-                            modifier = Modifier
-                                .aspectRatio(2f),
-                            factory = { exoplayerContext ->
-                                PlayerView(exoplayerContext).apply {
-                                    player = exoPlayer
-                                    useController = false
-                                }
-                            }
-                        )
-                        PlayerControlStrip(exoPlayer)
-                    }
-                    CollapsedPlayerTitleAndControls()
-                }
-                LinearProgressIndicator(
-                    progress = currentVideoProgress,
-                    modifier = Modifier.fillMaxWidth(),
-                    color = MaterialTheme.colorScheme.primary
+    BoxWithConstraints {
+        BottomSheetScaffold(
+            scaffoldState = bottomSheetScaffoldState,
+            sheetPeekHeight = 0.dp,
+            sheetContent = {
+                YoutubeDescriptionSheet(
+                    bottomSheetScaffoldState = bottomSheetScaffoldState,
+                    maxHeight = this@BoxWithConstraints.maxHeight
                 )
+            },
+            backgroundColor = Color.Transparent,
+            sheetBackgroundColor = if (bottomSheetScaffoldState.bottomSheetState.isCollapsed) Color.Transparent else MaterialTheme.colorScheme.background,
+        ) {
+            Column {
+                Box(
+                    contentAlignment = Alignment.BottomStart
+                ) {
+                    Row {
+                        BoxWithConstraints(contentAlignment = Alignment.Center) {
+                            AndroidView(
+                                modifier = Modifier
+                                    .aspectRatio(2f),
+                                factory = { exoplayerContext ->
+                                    PlayerView(exoplayerContext).apply {
+                                        player = exoPlayer
+                                        useController = false
+                                    }
+                                }
+                            )
+                            PlayerControlStrip(exoPlayer)
+                        }
+                        CollapsedPlayerTitleAndControls()
+                    }
+                    LinearProgressIndicator(
+                        progress = currentVideoProgress,
+                        modifier = Modifier.fillMaxWidth(),
+                        color = MaterialTheme.colorScheme.primary
+                    )
+                }
+                ExpandedPlayerTitleRow(bottomSheetScaffoldState = bottomSheetScaffoldState)
+                ExpandedPlayerActionRow()
+                ExpandedPlayerChannelRow()
             }
-            ExpandedPlayerTitleRow(bottomSheetScaffoldState = bottomSheetScaffoldState)
-            ExpandedPlayerActionRow()
-            ExpandedPlayerChannelRow()
         }
     }
 }

@@ -2,11 +2,11 @@ package com.mutualmobile.iswipe.android.view.screens.youtube_screen.components
 
 import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.gestures.Orientation
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -19,8 +19,11 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.BottomSheetScaffoldState
 import androidx.compose.material.Divider
 import androidx.compose.material.ExperimentalMaterialApi
+import androidx.compose.material.SwipeableState
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Close
+import androidx.compose.material.rememberSwipeableState
+import androidx.compose.material.swipeable
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
@@ -32,6 +35,8 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalDensity
+import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import coil.compose.rememberImagePainter
 import coil.transform.CircleCropTransformation
@@ -54,10 +59,15 @@ private object YoutubeDescriptionSheet {
 }
 
 @OptIn(ExperimentalMaterialApi::class)
-fun CoroutineScope.collapseBottomSheetWithListReset(bottomSheetScaffoldState: BottomSheetScaffoldState, listState: LazyListState) {
+private fun CoroutineScope.collapseBottomSheetWithListReset(
+    bottomSheetScaffoldState: BottomSheetScaffoldState,
+    listState: LazyListState,
+    swipeableState: SwipeableState<Int>
+) {
     this.launch {
         bottomSheetScaffoldState.bottomSheetState.collapse()
         listState.scrollToItem(0)
+        swipeableState.snapTo(0)
     }
 }
 
@@ -65,33 +75,46 @@ fun CoroutineScope.collapseBottomSheetWithListReset(bottomSheetScaffoldState: Bo
 @Composable
 fun YoutubeDescriptionSheet(
     bottomSheetScaffoldState: BottomSheetScaffoldState,
-    youtubeViewModel: YoutubeViewModel = get()
+    youtubeViewModel: YoutubeViewModel = get(),
+    maxHeight: Dp
 ) {
     val currentVideoItem by youtubeViewModel.currentSelectedVideoItem.collectAsState()
     val currentChannel by youtubeViewModel.currentYoutubeChannelBasic.collectAsState()
     val coroutineScope = rememberCoroutineScope()
     val listState = rememberLazyListState()
+    val swipeableState = rememberSwipeableState(initialValue = 0)
+    val sheetHeightInPx = with(LocalDensity.current) { maxHeight.toPx() }
+    val sheetAnchors = mapOf(sheetHeightInPx / 3.7f to 0, sheetHeightInPx to 1)
+
     if (bottomSheetScaffoldState.bottomSheetState.isExpanded || bottomSheetScaffoldState.bottomSheetState.isAnimationRunning) {
         BackHandler {
             coroutineScope.launch {
                 collapseBottomSheetWithListReset(
                     bottomSheetScaffoldState = bottomSheetScaffoldState,
-                    listState = listState
+                    listState = listState,
+                    swipeableState = swipeableState
                 )
             }
         }
     }
+
     Surface(
         tonalElevation = YoutubeDescriptionSheet.SURFACE_ELEVATION.dp,
         shape = RoundedCornerShape(
             topStartPercent = YoutubeDescriptionSheet.CORNER_PERCENTAGE,
             topEndPercent = YoutubeDescriptionSheet.CORNER_PERCENTAGE
+        ),
+        modifier = Modifier.swipeable(
+            state = swipeableState,
+            anchors = sheetAnchors,
+            orientation = Orientation.Vertical,
+            reverseDirection = true
         )
     ) {
         Column(
             modifier = Modifier
                 .fillMaxWidth()
-                .fillMaxHeight(0.655f)
+                .height(swipeableState.offset.value.dp)
         ) {
             Surface(tonalElevation = if (listState.firstVisibleItemIndex > 0) YoutubeDescriptionSheet.SHEET_SCROLL_ELEVATION.dp else 0.dp) {
                 Column {
@@ -122,7 +145,8 @@ fun YoutubeDescriptionSheet(
                             coroutineScope.launch {
                                 collapseBottomSheetWithListReset(
                                     bottomSheetScaffoldState = bottomSheetScaffoldState,
-                                    listState = listState
+                                    listState = listState,
+                                    swipeableState = swipeableState
                                 )
                             }
                         }) {
