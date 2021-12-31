@@ -91,7 +91,7 @@ fun YoutubeDescriptionSheet(
         Column(
             modifier = Modifier
                 .fillMaxWidth()
-                .fillMaxHeight(0.665f)
+                .fillMaxHeight(0.655f)
         ) {
             Surface(tonalElevation = if (listState.firstVisibleItemIndex > 0) YoutubeDescriptionSheet.SHEET_SCROLL_ELEVATION.dp else 0.dp) {
                 Column {

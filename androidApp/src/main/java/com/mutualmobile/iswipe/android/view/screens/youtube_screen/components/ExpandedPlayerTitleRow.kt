@@ -69,7 +69,7 @@ fun ExpandedPlayerTitleRow(youtubeViewModel: YoutubeViewModel = get(), bottomShe
         ) {
             ExpandedPlayerTitleRowText(
                 texts = arrayOf(
-                    Pair("${currentVideoItem?.statistics?.viewCount} views ", false),
+                    Pair("${currentVideoItem?.statistics?.viewCount} views", false),
                     Pair("${currentVideoItem?.snippet?.publishedAt} ago", false),
                     Pair(
                         currentVideoItem?.snippet?.tags?.subList(0, 3)?.joinToString(transform = { existingText ->
@@ -79,7 +79,6 @@ fun ExpandedPlayerTitleRow(youtubeViewModel: YoutubeViewModel = get(), bottomShe
                     )
                 )
             )
-            YoutubeCaptionDotDivider(paddingTop = ExpandedPlayerTitleRow.TEXT_PADDING_TOP.dp)
         }
     }
 }
@@ -89,9 +88,13 @@ private fun ExpandedPlayerTitleRowText(
     vararg texts: Pair<String, Boolean>
 ) {
     val builder = buildAnnotatedString {
-        texts.forEach { textPair ->
+        texts.forEachIndexed { index, textPair ->
             val textColor = if (textPair.second) MaterialTheme.colorScheme.tertiary else MaterialTheme.colorScheme.onSurface.copy(0.75f)
-            append(AnnotatedString("${textPair.first} ", spanStyle = SpanStyle(color = textColor, fontSize = 12.sp)))
+
+            val textValue = if (index + 1 < texts.size - 1 && !texts[index+1].second) "${textPair.first} . "
+            else "${textPair.first} "
+
+            append(AnnotatedString(textValue, spanStyle = SpanStyle(color = textColor, fontSize = 12.sp)))
         }
     }
 

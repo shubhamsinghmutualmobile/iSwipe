@@ -1,5 +1,6 @@
 package com.mutualmobile.iswipe.android.viewmodels
 
+import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.mutualmobile.iswipe.data.network.apis.YoutubeAPI
@@ -51,125 +52,149 @@ class YoutubeViewModel constructor(
     }
 
     fun getCurrentYoutubeResponse(getNextPage: Boolean = false) {
-        viewModelScope.launch {
-            withContext(Dispatchers.IO) {
-                if (!getNextPage) {
-                    _currentYoutubeResponse.emit(ResponseState.Loading)
-                }
-                when (
-                    val response = youtubeApi.getTrendingVideos(
-                        pageToken = if (getNextPage) {
-                            (_currentYoutubeResponse.value as ResponseState.Success).data.nextPageToken.orEmpty()
-                        } else {
-                            ""
-                        }
-                    )
-                ) {
-                    is ResponseState.Success -> {
-                        _currentYoutubeResponse.emit(ResponseState.Success(data = response.data))
-                        updateListOfYoutubeVideos()
+        try {
+            viewModelScope.launch {
+                withContext(Dispatchers.IO) {
+                    if (!getNextPage) {
+                        _currentYoutubeResponse.emit(ResponseState.Loading)
                     }
-                    is ResponseState.Failure -> {
-                        if (_listOfYoutubeVideos.value.isEmpty()) {
-                            _currentYoutubeResponse.emit(ResponseState.Failure(errorMsg = response.errorMsg))
+                    when (
+                        val response = youtubeApi.getTrendingVideos(
+                            pageToken = if (getNextPage) {
+                                (_currentYoutubeResponse.value as ResponseState.Success).data.nextPageToken.orEmpty()
+                            } else {
+                                ""
+                            }
+                        )
+                    ) {
+                        is ResponseState.Success -> {
+                            _currentYoutubeResponse.emit(ResponseState.Success(data = response.data))
+                            updateListOfYoutubeVideos()
                         }
-                    }
-                    else -> {
-                        _currentYoutubeResponse.emit(ResponseState.Failure(errorMsg = NetworkUtils.GENERIC_ERROR_MSG))
+                        is ResponseState.Failure -> {
+                            if (_listOfYoutubeVideos.value.isEmpty()) {
+                                _currentYoutubeResponse.emit(ResponseState.Failure(errorMsg = response.errorMsg))
+                            }
+                        }
+                        else -> {
+                            _currentYoutubeResponse.emit(ResponseState.Failure(errorMsg = NetworkUtils.GENERIC_ERROR_MSG))
+                        }
                     }
                 }
             }
+        } catch (e: Exception) {
+            Log.e(TAG, e.localizedMessage.orEmpty())
         }
     }
 
     private fun updateListOfYoutubeVideos() {
-        viewModelScope.launch {
-            if (_currentYoutubeResponse.value is ResponseState.Success) {
-                (_currentYoutubeResponse.value as ResponseState.Success).data.items?.let { nnItemList ->
-//                    _listOfYoutubeVideos.value.addAll(
-//                        nnItemList.filter { item ->
-//                            !_listOfYoutubeVideos.value.contains(item)
-//                        }
-//                    )
-//                    _listOfYoutubeVideos.value.addAll(
-//                        nnItemList.minus(_listOfYoutubeVideos.value.toHashSet())
-//                    )
-                    withContext(Dispatchers.IO) {
-                        nnItemList.forEach { item ->
-                            if (!_listOfYoutubeVideos.value.contains(item)) {
-                                _listOfYoutubeVideos.value.add(item)
+        try {
+            viewModelScope.launch {
+                if (_currentYoutubeResponse.value is ResponseState.Success) {
+                    (_currentYoutubeResponse.value as ResponseState.Success).data.items?.let { nnItemList ->
+                        withContext(Dispatchers.IO) {
+                            nnItemList.forEach { item ->
+                                if (!_listOfYoutubeVideos.value.contains(item)) {
+                                    _listOfYoutubeVideos.value.add(item)
+                                }
                             }
                         }
                     }
                 }
             }
+        } catch (e: Exception) {
+            Log.e(TAG, e.localizedMessage.orEmpty())
         }
     }
 
     fun addNewItemsToList() = getCurrentYoutubeResponse(_currentYoutubeResponse.value is ResponseState.Success)
 
     fun clearYoutubeList() {
-        viewModelScope.launch {
-            _listOfYoutubeVideos.emit(mutableListOf())
+        try {
+            viewModelScope.launch {
+                _listOfYoutubeVideos.emit(mutableListOf())
+            }
+        } catch (e: Exception) {
+            Log.e(TAG, e.localizedMessage.orEmpty())
         }
     }
 
     fun toggleIsVideoPlaying(isVideoPlaying: Boolean) {
-        viewModelScope.launch {
-            withContext(Dispatchers.IO) {
-                _isVideoPlaying.emit(!isVideoPlaying)
+        try {
+            viewModelScope.launch {
+                withContext(Dispatchers.IO) {
+                    _isVideoPlaying.emit(!isVideoPlaying)
+                }
             }
+        } catch (e: Exception) {
+            Log.e(TAG, e.localizedMessage.orEmpty())
         }
     }
 
     fun setIsCardExpanded(isCardExpanded: Boolean) {
-        viewModelScope.launch {
-            withContext(Dispatchers.IO) {
-                _isCardExpanded.emit(isCardExpanded)
+        try {
+            viewModelScope.launch {
+                withContext(Dispatchers.IO) {
+                    _isCardExpanded.emit(isCardExpanded)
+                }
             }
+        } catch (e: Exception) {
+            Log.e(TAG, e.localizedMessage.orEmpty())
         }
     }
 
     fun toggleIsCardTouched(isCardTouched: Boolean) {
-        viewModelScope.launch {
-            withContext(Dispatchers.IO) {
-                _isCardTouched.emit(!isCardTouched)
+        try {
+            viewModelScope.launch {
+                withContext(Dispatchers.IO) {
+                    _isCardTouched.emit(!isCardTouched)
+                }
             }
+        } catch (e: Exception) {
+            Log.e(TAG, e.localizedMessage.orEmpty())
         }
     }
 
     fun updateCurrentSelectedVideoItem(videoItem: Item?) {
-        viewModelScope.launch {
-            withContext(Dispatchers.IO) {
-                _currentSelectedVideoItem.emit(videoItem)
+        try {
+            viewModelScope.launch {
+                withContext(Dispatchers.IO) {
+                    _currentSelectedVideoItem.emit(videoItem)
+                }
             }
+        } catch (e: Exception) {
+            Log.e(TAG, e.localizedMessage.orEmpty())
         }
     }
 
     private fun getStreamLinkFromYouTubeId() {
-        viewModelScope.launch {
-            withContext(Dispatchers.IO) {
-                _currentSelectedVideoItem.collectLatest { item ->
-                    item?.let { nnItem ->
-                        val completeVideoUrl = YOUTUBE_BASE_URL + nnItem.videoLinkEndPart
-                        val completeChannelUrl = YOUTUBE_CHANNEL_BASE_URL + nnItem.snippet?.channelId
+        try {
+            viewModelScope.launch {
+                withContext(Dispatchers.IO) {
+                    _currentSelectedVideoItem.collectLatest { item ->
+                        item?.let { nnItem ->
+                            val completeVideoUrl = YOUTUBE_BASE_URL + nnItem.videoLinkEndPart
+                            val completeChannelUrl = YOUTUBE_CHANNEL_BASE_URL + nnItem.snippet?.channelId
 
-                        val youtubeService = YoutubeService(0)
+                            val youtubeService = YoutubeService(0)
 
-                        val linkDetails = youtubeService.getStreamExtractor(completeVideoUrl).apply { fetchPage() }
-                        val channelDetails = youtubeService.getChannelExtractor(completeChannelUrl).apply { fetchPage() }
+                            val linkDetails = youtubeService.getStreamExtractor(completeVideoUrl).apply { fetchPage() }
+                            val channelDetails = youtubeService.getChannelExtractor(completeChannelUrl).apply { fetchPage() }
 
-                        val channelToEmit = YoutubeChannelBasic(
-                            streamLink = linkDetails.videoStreams[2].url,
-                            channelAvatarUrl = linkDetails.uploaderAvatarUrl,
-                            subscriberCount = channelDetails.subscriberCount.toString(),
-                            channelName = channelDetails.name
-                        )
+                            val channelToEmit = YoutubeChannelBasic(
+                                streamLink = linkDetails.videoStreams[2].url,
+                                channelAvatarUrl = linkDetails.uploaderAvatarUrl,
+                                subscriberCount = channelDetails.subscriberCount.toString(),
+                                channelName = channelDetails.name
+                            )
 
-                        _currentYoutubeChannelBasic.emit(channelToEmit)
-                    } ?: _currentYoutubeChannelBasic.emit(null)
+                            _currentYoutubeChannelBasic.emit(channelToEmit)
+                        } ?: _currentYoutubeChannelBasic.emit(null)
+                    }
                 }
             }
+        } catch (e: Exception) {
+            Log.e(TAG, e.localizedMessage.orEmpty())
         }
     }
 }

@@ -5,9 +5,8 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.width
 import androidx.compose.material.BottomSheetScaffold
 import androidx.compose.material.BottomSheetValue
 import androidx.compose.material.ExperimentalMaterialApi
@@ -103,8 +102,7 @@ fun ExoPlayer(
                     BoxWithConstraints(contentAlignment = Alignment.Center) {
                         AndroidView(
                             modifier = Modifier
-                                .height(height = if (isCardExpanded) maxHeight / 3 else maxHeight)
-                                .width(width = if (isCardExpanded) maxWidth else maxWidth / 3),
+                                .aspectRatio(2f),
                             factory = { exoplayerContext ->
                                 PlayerView(exoplayerContext).apply {
                                     player = exoPlayer
