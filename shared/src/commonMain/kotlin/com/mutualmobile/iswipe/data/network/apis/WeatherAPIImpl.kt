@@ -1,7 +1,7 @@
 package com.mutualmobile.iswipe.data.network.apis
 
 import com.mutualmobile.iswipe.data.di.modules.NetworkModule
-import com.mutualmobile.iswipe.data.network.models.weather.CurrentWeatherResponse
+import com.mutualmobile.iswipe.data.network.models.weather.weather_current.CurrentWeatherResponse
 import com.mutualmobile.iswipe.data.network.utils.Either
 import com.mutualmobile.iswipe.data.network.utils.NetworkUtils
 import com.mutualmobile.iswipe.data.network.utils.safeApiCall

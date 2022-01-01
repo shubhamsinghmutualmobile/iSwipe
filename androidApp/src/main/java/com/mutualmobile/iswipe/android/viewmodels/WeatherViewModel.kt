@@ -3,18 +3,19 @@ package com.mutualmobile.iswipe.android.viewmodels
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.mutualmobile.iswipe.data.network.apis.WeatherAPI
-import com.mutualmobile.iswipe.data.network.models.weather.CurrentWeatherResponse
+import com.mutualmobile.iswipe.data.network.models.weather.weather_current.CurrentWeatherResponse
 import com.mutualmobile.iswipe.data.network.utils.NetworkUtils
 import com.mutualmobile.iswipe.data.states.ResponseState
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 
 class WeatherViewModel constructor(
     private val weatherAPI: WeatherAPI
 ) : ViewModel() {
     private var _currentWeather: MutableStateFlow<ResponseState<CurrentWeatherResponse>> = MutableStateFlow(ResponseState.Empty)
-    val currentWeather: StateFlow<ResponseState<CurrentWeatherResponse>> = _currentWeather
+    val currentWeather: StateFlow<ResponseState<CurrentWeatherResponse>> = _currentWeather.asStateFlow()
 
     init {
         getCurrentWeather()

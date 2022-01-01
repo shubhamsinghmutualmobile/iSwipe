@@ -1,4 +1,4 @@
-package com.mutualmobile.iswipe.data.network.models.weather
+package com.mutualmobile.iswipe.data.network.models.weather.weather_current
 
 import kotlinx.serialization.Serializable
 

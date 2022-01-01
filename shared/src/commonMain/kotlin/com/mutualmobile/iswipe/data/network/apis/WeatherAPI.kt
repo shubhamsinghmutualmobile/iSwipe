@@ -1,6 +1,6 @@
 package com.mutualmobile.iswipe.data.network.apis
 
-import com.mutualmobile.iswipe.data.network.models.weather.CurrentWeatherResponse
+import com.mutualmobile.iswipe.data.network.models.weather.weather_current.CurrentWeatherResponse
 import com.mutualmobile.iswipe.data.network.utils.NetworkUtils
 import com.mutualmobile.iswipe.data.states.ResponseState
 
