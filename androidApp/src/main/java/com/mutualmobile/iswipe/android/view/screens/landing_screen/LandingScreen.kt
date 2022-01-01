@@ -15,6 +15,8 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -30,14 +32,19 @@ import com.google.accompanist.systemuicontroller.rememberSystemUiController
 import com.mutualmobile.iswipe.android.R
 import com.mutualmobile.iswipe.android.view.screens.landing_screen.components.BoxIndicator
 import com.mutualmobile.iswipe.android.view.screens.weather_screen.WeatherScreen
+import com.mutualmobile.iswipe.android.view.screens.weather_screen.utils.getWeatherIndicatorIcon
 import com.mutualmobile.iswipe.android.view.screens.youtube_screen.YoutubeScreen
+import com.mutualmobile.iswipe.android.viewmodels.WeatherViewModel
+import com.mutualmobile.iswipe.data.network.models.weather.weather_current.CurrentWeatherResponse
+import com.mutualmobile.iswipe.data.states.ResponseState
 import kotlinx.coroutines.launch
+import org.koin.androidx.compose.get
 
 const val WeatherTestTag = "WeatherTag"
 const val YoutubeTestTag = "YoutubeTag"
 
-enum class TabScreens(@DrawableRes val icon: Int, val testTag: String) {
-    Weather(icon = R.drawable.ic_weather, testTag = WeatherTestTag),
+enum class TabScreens(@DrawableRes val icon: Int?, val testTag: String) {
+    Weather(icon = null, testTag = WeatherTestTag),
     Youtube(icon = R.drawable.ic_youtube, testTag = YoutubeTestTag),
 }
 
@@ -54,10 +61,11 @@ fun GetTabScreen(index: TabScreens) {
     ExperimentalMaterial3Api::class
 )
 @Composable
-fun LandingScreen() {
+fun LandingScreen(weatherViewModel: WeatherViewModel = get()) {
     val pagerState = rememberPagerState()
     val tabIndex = pagerState.currentPage
     val coroutineScope = rememberCoroutineScope()
+    val currentWeatherResponse by weatherViewModel.currentWeather.collectAsState()
 
     val systemUiController = rememberSystemUiController()
     systemUiController.setSystemBarsColor(color = Color.Transparent, darkIcons = !isSystemInDarkTheme())
@@ -69,7 +77,7 @@ fun LandingScreen() {
                 indicator = { tabPositions ->
                     BoxIndicator(tabIndex, tabPositions, pagerState)
                 },
-                backgroundColor = MaterialTheme.colorScheme.surface,
+                backgroundColor = Color.Transparent,
             ) {
                 TabScreens.values().forEachIndexed { index, screen ->
                     Tab(
@@ -85,7 +93,16 @@ fun LandingScreen() {
                         text = { Text(text = screen.name, color = MaterialTheme.colorScheme.onSurface) },
                         icon = {
                             Image(
-                                painter = painterResource(id = screen.icon),
+                                painter = painterResource(
+                                    id = screen.icon
+                                        ?: when (currentWeatherResponse) {
+                                            is ResponseState.Success ->
+                                                (currentWeatherResponse as ResponseState.Success<CurrentWeatherResponse>)
+                                                    .data.weather?.get(0)?.icon?.getWeatherIndicatorIcon()
+                                                    ?: R.drawable.ic_weather
+                                            else -> R.drawable.ic_weather
+                                        }
+                                ),
                                 contentDescription = "${screen.name} tab",
                                 modifier = Modifier.size(24.dp)
                             )

@@ -65,6 +65,7 @@ object AndroidLibs {
 object CommonMainPluginVersions {
     const val ktor = "1.6.7"
     const val koin = "3.1.4"
+    const val kotlinx_dateTime = "0.3.1"
 }
 
 object CommonMainDependencies {
@@ -74,6 +75,7 @@ object CommonMainDependencies {
         "io.ktor:ktor-client-cio:${CommonMainPluginVersions.ktor}",
         "io.ktor:ktor-client-mock:${CommonMainPluginVersions.ktor}",
         "io.insert-koin:koin-core:${CommonMainPluginVersions.koin}",
+        "org.jetbrains.kotlinx:kotlinx-datetime:${CommonMainPluginVersions.kotlinx_dateTime}"
     )
 }
 
