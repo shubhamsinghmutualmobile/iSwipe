@@ -30,6 +30,7 @@ import com.google.accompanist.pager.HorizontalPager
 import com.google.accompanist.pager.rememberPagerState
 import com.google.accompanist.systemuicontroller.rememberSystemUiController
 import com.mutualmobile.iswipe.android.R
+import com.mutualmobile.iswipe.android.view.screens.files_screen.FilesScreen
 import com.mutualmobile.iswipe.android.view.screens.landing_screen.components.BoxIndicator
 import com.mutualmobile.iswipe.android.view.screens.weather_screen.WeatherScreen
 import com.mutualmobile.iswipe.android.view.screens.weather_screen.utils.getWeatherIndicatorIcon
@@ -42,10 +43,16 @@ import org.koin.androidx.compose.get
 
 const val WeatherTestTag = "WeatherTag"
 const val YoutubeTestTag = "YoutubeTag"
+const val FilesTag = "FilesTag"
+const val CalculatorTag = "CalculatorTag"
+const val BrowserTag = "BrowserTag"
 
 enum class TabScreens(@DrawableRes val icon: Int?, val testTag: String) {
     Weather(icon = null, testTag = WeatherTestTag),
     Youtube(icon = R.drawable.ic_youtube, testTag = YoutubeTestTag),
+    Files(icon = R.drawable.ic_files, testTag = FilesTag),
+    Calculator(icon = R.drawable.ic_calculator, testTag = CalculatorTag),
+    Browser(icon = R.drawable.ic_browser, testTag = BrowserTag)
 }
 
 @Composable
@@ -53,6 +60,9 @@ fun GetTabScreen(index: TabScreens) {
     return when (index) {
         TabScreens.Weather -> WeatherScreen()
         TabScreens.Youtube -> YoutubeScreen()
+        TabScreens.Files -> FilesScreen(text = "Files")
+        TabScreens.Calculator -> FilesScreen(text = "Calculator")
+        TabScreens.Browser -> FilesScreen(text = "Browser")
     }
 }
 
