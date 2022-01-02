@@ -4,14 +4,17 @@ import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.slideInVertically
 import androidx.compose.animation.slideOutVertically
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.unit.dp
 import com.mutualmobile.iswipe.android.view.screens.weather_screen.utils.hpaToBar
 import com.mutualmobile.iswipe.android.view.screens.weather_screen.utils.kelvinToCelsius
 import com.mutualmobile.iswipe.data.network.models.weather.weather_current.CurrentWeatherResponse
@@ -49,6 +52,9 @@ fun WeatherBottomCardHiddenColumn(
             LazyColumn {
                 items(count = hiddenInfoRows.size) { index ->
                     WeatherBottomCardHiddenTextRow(title = hiddenInfoRows[index].first, value = hiddenInfoRows[index].second.orEmpty())
+                }
+                item {
+                    Spacer(modifier = Modifier.padding(4.dp))
                 }
             }
         }

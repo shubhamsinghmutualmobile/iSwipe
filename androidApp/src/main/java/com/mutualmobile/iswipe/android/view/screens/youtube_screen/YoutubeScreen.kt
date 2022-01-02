@@ -32,6 +32,8 @@ import androidx.compose.ui.unit.dp
 import com.google.accompanist.swiperefresh.SwipeRefresh
 import com.google.accompanist.swiperefresh.rememberSwipeRefreshState
 import com.google.accompanist.systemuicontroller.rememberSystemUiController
+import com.mutualmobile.iswipe.android.R
+import com.mutualmobile.iswipe.android.view.screens.common.FailureScreen
 import com.mutualmobile.iswipe.android.view.screens.youtube_screen.components.YoutubeMiniPlayer
 import com.mutualmobile.iswipe.android.view.screens.youtube_screen.components.YoutubeTopBar
 import com.mutualmobile.iswipe.android.view.screens.youtube_screen.components.YoutubeVideoList
@@ -111,15 +113,6 @@ fun YoutubeScreen(
                 modifier = Modifier.fillMaxSize(),
                 contentAlignment = Alignment.Center
             ) {
-                YoutubeVideoList(
-                    expandMiniPlayer = {
-                        coroutineScope.launch {
-                            miniPlayerSwipeableState.animateTo(1, tween(durationMillis = YoutubeMiniPlayer.SWIPE_ANIMATION_DURATION))
-                        }
-                    },
-                    nestedScrollConnection = nestedScrollConnection,
-                    toolbarHeight = toolbarHeight
-                )
                 when (val result = response.value) {
                     is ResponseState.Empty -> {
                         Text("")
@@ -129,9 +122,19 @@ fun YoutubeScreen(
                             color = MaterialTheme.colorScheme.primary
                         )
                     }
-                    is ResponseState.Success -> {}
+                    is ResponseState.Success -> {
+                        YoutubeVideoList(
+                            expandMiniPlayer = {
+                                coroutineScope.launch {
+                                    miniPlayerSwipeableState.animateTo(1, tween(durationMillis = YoutubeMiniPlayer.SWIPE_ANIMATION_DURATION))
+                                }
+                            },
+                            nestedScrollConnection = nestedScrollConnection,
+                            toolbarHeight = toolbarHeight
+                        )
+                    }
                     is ResponseState.Failure -> {
-                        Text(result.errorMsg)
+                        FailureScreen(failureMsg = result.errorMsg, animationRef = R.raw.youtube_failure_animaiton)
                     }
                 }
             }

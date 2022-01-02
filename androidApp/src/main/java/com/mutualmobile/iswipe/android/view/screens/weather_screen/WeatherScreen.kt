@@ -11,7 +11,7 @@ import androidx.compose.ui.platform.LocalDensity
 import com.google.accompanist.insets.LocalWindowInsets
 import com.google.accompanist.swiperefresh.SwipeRefresh
 import com.google.accompanist.swiperefresh.rememberSwipeRefreshState
-import com.mutualmobile.iswipe.android.view.screens.weather_screen.components.WeatherFailureScreen
+import com.mutualmobile.iswipe.android.view.screens.common.FailureScreen
 import com.mutualmobile.iswipe.android.view.screens.weather_screen.components.WeatherLoadingAnimation
 import com.mutualmobile.iswipe.android.view.screens.weather_screen.components.WeatherSuccessScreen
 import com.mutualmobile.iswipe.android.viewmodels.WeatherViewModel
@@ -44,7 +44,7 @@ fun WeatherScreen(
                     WeatherSuccessScreen(weatherItem = targetState.data)
                 }
                 is ResponseState.Failure -> {
-                    WeatherFailureScreen(failureMsg = targetState.errorMsg)
+                    FailureScreen(failureMsg = targetState.errorMsg)
                 }
             }
         }

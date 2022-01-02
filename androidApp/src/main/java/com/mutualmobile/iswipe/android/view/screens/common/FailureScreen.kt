@@ -1,5 +1,6 @@
-package com.mutualmobile.iswipe.android.view.screens.weather_screen.components
+package com.mutualmobile.iswipe.android.view.screens.common
 
+import androidx.annotation.RawRes
 import androidx.compose.animation.animateContentSize
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.foundation.layout.Arrangement
@@ -37,10 +38,20 @@ import com.airbnb.lottie.compose.rememberLottieComposition
 import com.mutualmobile.iswipe.android.R
 import com.mutualmobile.iswipe.android.view.theme.WeatherScreenTypography
 
-@Composable
-fun WeatherFailureScreen(failureMsg: String) {
+private object FailureScreen {
+    const val ERROR_HEADING = "Oh no! There's some error!"
+    const val ERROR_SUBHEADING = "Click on the arrow to reveal the technical error message\nor\nSwipe from the top to retry"
+}
 
-    val failureAnimaComposition by rememberLottieComposition(spec = LottieCompositionSpec.RawRes(R.raw.weather_failure_animation))
+@Composable
+fun FailureScreen(
+    failureMsg: String,
+    @RawRes animationRef: Int = R.raw.weather_failure_animation,
+    errorHeading: String = FailureScreen.ERROR_HEADING,
+    errorSubHeading: String = FailureScreen.ERROR_SUBHEADING
+) {
+
+    val failureAnimaComposition by rememberLottieComposition(spec = LottieCompositionSpec.RawRes(animationRef))
     val failureAnimaAnimationProgress by animateLottieCompositionAsState(
         composition = failureAnimaComposition,
         iterations = LottieConstants.IterateForever
@@ -80,13 +91,13 @@ fun WeatherFailureScreen(failureMsg: String) {
                     horizontalAlignment = Alignment.CenterHorizontally
                 ) {
                     Text(
-                        "Oh no! There's some error!",
+                        errorHeading,
                         style = WeatherScreenTypography.labelMedium,
                         textAlign = TextAlign.Center
                     )
                     Spacer(modifier = Modifier.padding(8.dp))
                     Text(
-                        "Click on the arrow to reveal the technical error message\nor\nSwipe from the top to retry",
+                        errorSubHeading,
                         style = WeatherScreenTypography.labelSmall,
                         textAlign = TextAlign.Center
                     )
