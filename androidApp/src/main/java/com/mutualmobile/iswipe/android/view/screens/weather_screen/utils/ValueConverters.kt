@@ -5,6 +5,6 @@ fun Double.kelvinToCelsius(): String {
 }
 
 fun Int.meterToKilometre(): String =
-    "${this.toFloat().div(1000).toString().subSequence(0, if (this.toString().lastIndex >= 5) 5 else this.toString().lastIndex)} km"
+    "${this.toFloat().div(1000).toString().subSequence(0, if (this.toString().lastIndex > 5) 5 else this.toString().lastIndex)} km"
 
 fun Int.hpaToBar(): String = "${this.toFloat().div(1000).toString().subSequence(0, 5)} bar"

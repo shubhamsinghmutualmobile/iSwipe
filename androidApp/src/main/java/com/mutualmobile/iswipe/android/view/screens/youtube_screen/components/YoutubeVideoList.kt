@@ -2,6 +2,8 @@ package com.mutualmobile.iswipe.android.view.screens.youtube_screen.components
 
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.animateContentSize
+import androidx.compose.animation.slideInVertically
+import androidx.compose.animation.slideOutVertically
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
@@ -58,7 +60,11 @@ fun YoutubeVideoList(
                 item { YoutubeVideoCard(video = video, expandMiniPlayer = expandMiniPlayer) }
             }
             item {
-                AnimatedVisibility(visible = listState.isScrolledToEnd() && response !is ResponseState.Loading && listState.layoutInfo.totalItemsCount > 2) {
+                AnimatedVisibility(
+                    visible = listState.isScrolledToEnd() && response !is ResponseState.Loading && listState.layoutInfo.totalItemsCount > 2,
+                    enter = slideInVertically(initialOffsetY = { it / 2 }),
+                    exit = slideOutVertically(targetOffsetY = { it / 2 })
+                ) {
                     LoadingIndicator(listState)
                 }
             }

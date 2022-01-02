@@ -2,6 +2,11 @@ package com.mutualmobile.iswipe.android.view.screens.youtube_screen
 
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.core.tween
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.fadeOut
+import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.PaddingValues
@@ -135,7 +140,21 @@ fun YoutubeScreen(
                                 nestedScrollConnection = nestedScrollConnection,
                                 toolbarHeight = toolbarHeight
                             )
-                            AnimatedVisibility(visible = isMiniPlayerLoading) { CircularProgressIndicator(color = MaterialTheme.colorScheme.primary) }
+                            AnimatedVisibility(
+                                visible = isMiniPlayerLoading,
+                                enter = fadeIn(),
+                                exit = fadeOut()
+                            ) {
+                                Box(
+                                    modifier = Modifier
+                                        .fillMaxSize()
+                                        .clickable(interactionSource = MutableInteractionSource(), indication = null) {}
+                                        .background(MaterialTheme.colorScheme.background.copy(alpha = 0.3f)),
+                                    contentAlignment = Alignment.Center
+                                ) {
+                                    CircularProgressIndicator(color = MaterialTheme.colorScheme.primary)
+                                }
+                            }
                         }
                     }
                     is ResponseState.Failure -> {
