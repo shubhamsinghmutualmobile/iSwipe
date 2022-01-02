@@ -9,6 +9,7 @@ import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -23,7 +24,8 @@ import com.mutualmobile.iswipe.data.network.utils.millisToTextualDayDate
 @Composable
 fun WeatherBottomCardHiddenColumn(
     isCardExpanded: Boolean,
-    weatherItem: CurrentWeatherResponse
+    weatherItem: CurrentWeatherResponse,
+    bottomHiddenListState: LazyListState
 ) {
     AnimatedVisibility(
         visible = isCardExpanded,
@@ -49,7 +51,7 @@ fun WeatherBottomCardHiddenColumn(
                     )
                 )
             }
-            LazyColumn {
+            LazyColumn(state = bottomHiddenListState) {
                 items(count = hiddenInfoRows.size) { index ->
                     WeatherBottomCardHiddenTextRow(title = hiddenInfoRows[index].first, value = hiddenInfoRows[index].second.orEmpty())
                 }

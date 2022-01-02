@@ -13,6 +13,7 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Card
 import androidx.compose.material.ExperimentalMaterialApi
@@ -23,6 +24,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -32,12 +34,15 @@ import androidx.compose.ui.unit.dp
 import com.mutualmobile.iswipe.android.R
 import com.mutualmobile.iswipe.android.view.screens.weather_screen.utils.meterToKilometre
 import com.mutualmobile.iswipe.data.network.models.weather.weather_current.CurrentWeatherResponse
+import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalMaterialApi::class)
 @Composable
 fun BoxScope.WeatherBottomExpandableCard(weatherItem: CurrentWeatherResponse) {
     var isCardExpanded by remember { mutableStateOf(false) }
     val cardBackgroundAlpha by animateFloatAsState(targetValue = if (isCardExpanded) 0.5f else 0.1f)
+    val bottomHiddenListState = rememberLazyListState()
+    val coroutineScope = rememberCoroutineScope()
 
     Column(horizontalAlignment = Alignment.CenterHorizontally, modifier = Modifier.align(Alignment.BottomCenter)) {
         AnimatedVisibility(
@@ -60,7 +65,12 @@ fun BoxScope.WeatherBottomExpandableCard(weatherItem: CurrentWeatherResponse) {
             border = BorderStroke(2.dp, Color.White),
             backgroundColor = MaterialTheme.colorScheme.surface.copy(alpha = cardBackgroundAlpha),
             elevation = 0.dp,
-            onClick = { isCardExpanded = !isCardExpanded },
+            onClick = {
+                isCardExpanded = !isCardExpanded
+                if (!isCardExpanded) {
+                    coroutineScope.launch { bottomHiddenListState.scrollToItem(0) }
+                }
+            },
             interactionSource = MutableInteractionSource(),
             indication = rememberRipple()
         ) {
@@ -74,7 +84,7 @@ fun BoxScope.WeatherBottomExpandableCard(weatherItem: CurrentWeatherResponse) {
                     )
                     WeatherBottomCardText("${weatherItem.wind?.speed} m/s", "Wind Speed", R.raw.weather_wind_speed_animation)
                 }
-                WeatherBottomCardHiddenColumn(isCardExpanded, weatherItem)
+                WeatherBottomCardHiddenColumn(isCardExpanded, weatherItem, bottomHiddenListState)
             }
         }
     }
