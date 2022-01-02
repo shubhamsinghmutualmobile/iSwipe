@@ -46,6 +46,9 @@ class YoutubeViewModel constructor(
     private val _currentYoutubeChannelBasic: MutableStateFlow<YoutubeChannelBasic?> = MutableStateFlow(null)
     val currentYoutubeChannelBasic: StateFlow<YoutubeChannelBasic?> = _currentYoutubeChannelBasic.asStateFlow()
 
+    private val _isMiniPlayerLoading: MutableStateFlow<Boolean> = MutableStateFlow(value = false)
+    val isMiniPlayerLoading: StateFlow<Boolean> = _isMiniPlayerLoading.asStateFlow()
+
     init {
         getCurrentYoutubeResponse()
         getStreamLinkFromYouTubeId()
@@ -195,6 +198,12 @@ class YoutubeViewModel constructor(
             }
         } catch (e: Exception) {
             Log.e(TAG, e.localizedMessage.orEmpty())
+        }
+    }
+
+    fun setMiniPlayerLoading(isLoading: Boolean) {
+        viewModelScope.launch(Dispatchers.IO) {
+            _isMiniPlayerLoading.emit(isLoading)
         }
     }
 }

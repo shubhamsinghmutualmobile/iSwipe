@@ -43,7 +43,7 @@ private fun getMockClient(response: String): HttpClient {
 
 @ExperimentalSerializationApi
 val network = module {
-    single { NetworkModule(getMockClient(TestNetworkUtils.WEATHER_RESPONSE_SUCCESS)) }
+    single { NetworkModule(getMockClient(TestNetworkUtils.YOUTUBE_VIDEOS_RESPONSE_SUCCESS)) }
     single<WeatherAPI> { WeatherAPIImpl(get()) }
     single<YoutubeAPI> { YoutubeAPIImpl(get()) }
 }

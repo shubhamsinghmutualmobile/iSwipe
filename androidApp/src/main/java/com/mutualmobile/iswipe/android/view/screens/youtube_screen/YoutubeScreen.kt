@@ -118,20 +118,25 @@ fun YoutubeScreen(
                         Text("")
                     }
                     is ResponseState.Loading -> {
-                        CircularProgressIndicator(
-                            color = MaterialTheme.colorScheme.primary
-                        )
+                        CircularProgressIndicator(color = MaterialTheme.colorScheme.primary)
                     }
                     is ResponseState.Success -> {
-                        YoutubeVideoList(
-                            expandMiniPlayer = {
-                                coroutineScope.launch {
-                                    miniPlayerSwipeableState.animateTo(1, tween(durationMillis = YoutubeMiniPlayer.SWIPE_ANIMATION_DURATION))
-                                }
-                            },
-                            nestedScrollConnection = nestedScrollConnection,
-                            toolbarHeight = toolbarHeight
-                        )
+                        Box(
+                            modifier = Modifier.fillMaxSize(),
+                            contentAlignment = Alignment.Center
+                        ) {
+                            val isMiniPlayerLoading by youtubeViewModel.isMiniPlayerLoading.collectAsState()
+                            YoutubeVideoList(
+                                expandMiniPlayer = {
+                                    coroutineScope.launch {
+                                        miniPlayerSwipeableState.animateTo(1, tween(durationMillis = YoutubeMiniPlayer.SWIPE_ANIMATION_DURATION))
+                                    }
+                                },
+                                nestedScrollConnection = nestedScrollConnection,
+                                toolbarHeight = toolbarHeight
+                            )
+                            AnimatedVisibility(visible = isMiniPlayerLoading) { CircularProgressIndicator(color = MaterialTheme.colorScheme.primary) }
+                        }
                     }
                     is ResponseState.Failure -> {
                         FailureScreen(failureMsg = result.errorMsg, animationRef = R.raw.youtube_failure_animaiton)

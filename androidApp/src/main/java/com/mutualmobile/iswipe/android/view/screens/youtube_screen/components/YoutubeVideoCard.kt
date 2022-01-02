@@ -20,6 +20,7 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -43,19 +44,27 @@ fun YoutubeVideoCard(video: Item, youtubeViewModel: YoutubeViewModel = get(), ex
     val iconInteractionSource by remember { mutableStateOf(MutableInteractionSource()) }
     val coroutineScope = rememberCoroutineScope()
     var isDropDownMenuExpanded by remember { mutableStateOf(false) }
+    val currentYoutubeVideoItem by youtubeViewModel.currentSelectedVideoItem.collectAsState()
     Column(
         modifier = Modifier.clickable(
             interactionSource = interactionSource,
             indication = rememberRipple()
         ) {
-            coroutineScope.launch {
-                youtubeViewModel.toggleIsVideoPlaying(isVideoPlaying = true)
-                delay(100)
-                youtubeViewModel.updateCurrentSelectedVideoItem(videoItem = null)
-                delay(100)
-                youtubeViewModel.updateCurrentSelectedVideoItem(videoItem = video)
+            if (currentYoutubeVideoItem == video) {
                 expandMiniPlayer()
-                youtubeViewModel.toggleIsVideoPlaying(isVideoPlaying = false)
+            } else {
+                coroutineScope.launch {
+                    with(youtubeViewModel) {
+                        setMiniPlayerLoading(isLoading = true)
+                        toggleIsVideoPlaying(isVideoPlaying = true)
+                        delay(100)
+                        updateCurrentSelectedVideoItem(videoItem = null)
+                        delay(100)
+                        updateCurrentSelectedVideoItem(videoItem = video)
+                        expandMiniPlayer()
+                        toggleIsVideoPlaying(isVideoPlaying = false)
+                    }
+                }
             }
         }
     ) {

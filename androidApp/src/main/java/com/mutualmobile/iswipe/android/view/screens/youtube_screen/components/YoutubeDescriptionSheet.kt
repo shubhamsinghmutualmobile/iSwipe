@@ -84,7 +84,7 @@ fun YoutubeDescriptionSheet(
     val listState = rememberLazyListState()
     val swipeableState = rememberSwipeableState(initialValue = 0)
     val sheetHeightInPx = with(LocalDensity.current) { maxHeight.toPx() }
-    val sheetAnchors = mapOf(sheetHeightInPx / 3.7f to 0, sheetHeightInPx to 1)
+    val sheetAnchors = mapOf(sheetHeightInPx / 3.85f to 0, sheetHeightInPx to 1)
 
     if (bottomSheetScaffoldState.bottomSheetState.isExpanded || bottomSheetScaffoldState.bottomSheetState.isAnimationRunning) {
         BackHandler {

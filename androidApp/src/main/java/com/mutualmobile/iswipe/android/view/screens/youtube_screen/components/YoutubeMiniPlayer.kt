@@ -52,7 +52,10 @@ fun YoutubeMiniPlayer(
     }
     val anchors = mapOf(0f to 0, screenHeightDp to 1)
 
-    youtubeViewModel.setIsCardExpanded(swipeableState.currentValue == 1)
+    with(youtubeViewModel) {
+        setIsCardExpanded(swipeableState.currentValue == 1)
+        setMiniPlayerLoading(isLoading = false)
+    }
 
     Card(
         modifier = Modifier

@@ -49,7 +49,7 @@ fun ExoPlayer(
     val context = LocalContext.current
 
     val bottomSheetScaffoldState = rememberBottomSheetScaffoldState(
-        bottomSheetState = rememberBottomSheetState(initialValue = BottomSheetValue.Expanded)
+        bottomSheetState = rememberBottomSheetState(initialValue = BottomSheetValue.Collapsed)
     )
     val coroutineScope = rememberCoroutineScope()
 
@@ -105,7 +105,7 @@ fun ExoPlayer(
                         BoxWithConstraints(contentAlignment = Alignment.Center) {
                             AndroidView(
                                 modifier = Modifier
-                                    .aspectRatio(2f),
+                                    .aspectRatio(1.79f),
                                 factory = { exoplayerContext ->
                                     PlayerView(exoplayerContext).apply {
                                         player = exoPlayer
