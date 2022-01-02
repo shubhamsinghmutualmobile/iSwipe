@@ -1,6 +1,7 @@
 package com.mutualmobile.iswipe.android.view.screens.youtube_screen.components
 
 import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.animateContentSize
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
@@ -27,7 +28,6 @@ import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
-import com.google.accompanist.insets.navigationBarsPadding
 import com.mutualmobile.iswipe.android.R
 import com.mutualmobile.iswipe.android.view.utils.isScrolledToEnd
 import com.mutualmobile.iswipe.android.viewmodels.YoutubeViewModel
@@ -45,22 +45,29 @@ fun YoutubeVideoList(
     val listOfVideos by youtubeViewModel.listOfYoutubeVideos.collectAsState()
     val listState = rememberLazyListState()
     val response by youtubeViewModel.currentYoutubeResponse.collectAsState()
+    val coroutineScope = rememberCoroutineScope()
     LazyColumn(
         state = listState,
         modifier = Modifier
             .fillMaxSize()
-            .nestedScroll(nestedScrollConnection),
+            .nestedScroll(nestedScrollConnection)
+            .animateContentSize(),
         content = {
             item { Spacer(modifier = Modifier.height(toolbarHeight)) }
             listOfVideos.distinctBy { it.videoLinkEndPart }.forEach { video ->
                 item { YoutubeVideoCard(video = video, expandMiniPlayer = expandMiniPlayer) }
             }
             item {
-                AnimatedVisibility(visible = listState.isScrolledToEnd() && response !is ResponseState.Loading) {
+                AnimatedVisibility(visible = listState.isScrolledToEnd() && response !is ResponseState.Loading && listState.layoutInfo.totalItemsCount > 2) {
                     LoadingIndicator(listState)
                 }
             }
             if (listState.isScrolledToEnd()) {
+                coroutineScope.launch {
+                    listState.scroll {
+                        this.scrollBy(200f)
+                    }
+                }
                 youtubeViewModel.addNewItemsToList()
             }
         }
@@ -73,7 +80,7 @@ private fun LoadingIndicator(listState: LazyListState) {
     Box(
         contentAlignment = Alignment.Center,
         modifier = Modifier
-            .navigationBarsPadding()
+            .padding(bottom = 100.dp, top = 16.dp)
             .fillMaxWidth()
     ) {
         LaunchedEffect(Unit) {
