@@ -11,9 +11,7 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 
-class WeatherViewModel constructor(
-    private val weatherAPI: WeatherAPI
-) : ViewModel() {
+actual class WeatherViewModel actual constructor(private val weatherAPI: WeatherAPI) : ViewModel() {
     private var _currentWeather: MutableStateFlow<ResponseState<CurrentWeatherResponse>> = MutableStateFlow(ResponseState.Empty)
     val currentWeather: StateFlow<ResponseState<CurrentWeatherResponse>> = _currentWeather.asStateFlow()
 
@@ -21,7 +19,7 @@ class WeatherViewModel constructor(
         getCurrentWeather()
     }
 
-    fun getCurrentWeather() {
+    actual fun getCurrentWeather() {
         viewModelScope.launch {
             _currentWeather.emit(ResponseState.Loading)
             when (val response = weatherAPI.getCurrentWeather()) {
