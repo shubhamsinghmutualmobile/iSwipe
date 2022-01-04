@@ -41,8 +41,8 @@ import androidx.compose.ui.unit.dp
 import coil.compose.rememberImagePainter
 import coil.transform.CircleCropTransformation
 import com.mutualmobile.iswipe.android.view.theme.YoutubePlayerTypography
-import com.mutualmobile.iswipe.android.viewmodels.YoutubeViewModel
 import com.mutualmobile.iswipe.data.network.models.youtube_trending_videos.Item
+import com.mutualmobile.iswipe.viewmodels.YoutubeViewModel
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 import org.koin.androidx.compose.get

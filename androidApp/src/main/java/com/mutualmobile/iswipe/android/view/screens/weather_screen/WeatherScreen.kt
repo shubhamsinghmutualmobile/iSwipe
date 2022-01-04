@@ -14,8 +14,8 @@ import com.google.accompanist.swiperefresh.rememberSwipeRefreshState
 import com.mutualmobile.iswipe.android.view.screens.common.FailureScreen
 import com.mutualmobile.iswipe.android.view.screens.weather_screen.components.WeatherLoadingAnimation
 import com.mutualmobile.iswipe.android.view.screens.weather_screen.components.WeatherSuccessScreen
-import com.mutualmobile.iswipe.android.viewmodels.WeatherViewModel
 import com.mutualmobile.iswipe.data.states.ResponseState
+import com.mutualmobile.iswipe.viewmodels.WeatherViewModel
 import org.koin.androidx.compose.get
 
 @OptIn(ExperimentalAnimationApi::class)

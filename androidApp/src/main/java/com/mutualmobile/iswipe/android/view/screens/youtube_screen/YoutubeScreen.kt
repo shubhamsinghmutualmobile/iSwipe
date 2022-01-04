@@ -42,8 +42,8 @@ import com.mutualmobile.iswipe.android.view.screens.common.FailureScreen
 import com.mutualmobile.iswipe.android.view.screens.youtube_screen.components.YoutubeMiniPlayer
 import com.mutualmobile.iswipe.android.view.screens.youtube_screen.components.YoutubeTopBar
 import com.mutualmobile.iswipe.android.view.screens.youtube_screen.components.YoutubeVideoList
-import com.mutualmobile.iswipe.android.viewmodels.YoutubeViewModel
 import com.mutualmobile.iswipe.data.states.ResponseState
+import com.mutualmobile.iswipe.viewmodels.YoutubeViewModel
 import kotlinx.coroutines.launch
 import org.koin.androidx.compose.get
 import kotlin.math.roundToInt
@@ -109,7 +109,7 @@ fun YoutubeScreen(
             onRefresh = {
                 with(youtubeViewModel) {
                     clearYoutubeList()
-                    getCurrentYoutubeResponse()
+                    getCurrentYoutubeResponse(getNextPage = false)
                 }
             },
             indicatorPadding = PaddingValues(bottom = toolbarHeight * 1.5f)

@@ -24,7 +24,7 @@ import androidx.compose.ui.unit.dp
 import com.google.accompanist.insets.LocalWindowInsets
 import com.google.accompanist.insets.rememberInsetsPaddingValues
 import com.mutualmobile.iswipe.android.view.screens.youtube_screen.YoutubeScreen
-import com.mutualmobile.iswipe.android.viewmodels.YoutubeViewModel
+import com.mutualmobile.iswipe.viewmodels.YoutubeViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext

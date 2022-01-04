@@ -35,9 +35,9 @@ import com.mutualmobile.iswipe.android.view.screens.landing_screen.components.Bo
 import com.mutualmobile.iswipe.android.view.screens.weather_screen.WeatherScreen
 import com.mutualmobile.iswipe.android.view.screens.weather_screen.utils.getWeatherIndicatorIcon
 import com.mutualmobile.iswipe.android.view.screens.youtube_screen.YoutubeScreen
-import com.mutualmobile.iswipe.android.viewmodels.WeatherViewModel
 import com.mutualmobile.iswipe.data.network.models.weather.weather_current.CurrentWeatherResponse
 import com.mutualmobile.iswipe.data.states.ResponseState
+import com.mutualmobile.iswipe.viewmodels.WeatherViewModel
 import kotlinx.coroutines.launch
 import org.koin.androidx.compose.get
 

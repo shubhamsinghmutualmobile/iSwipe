@@ -32,8 +32,8 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import coil.compose.rememberImagePainter
 import com.mutualmobile.iswipe.android.R
-import com.mutualmobile.iswipe.android.viewmodels.YoutubeViewModel
 import com.mutualmobile.iswipe.data.network.models.youtube_trending_videos.Item
+import com.mutualmobile.iswipe.viewmodels.YoutubeViewModel
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import org.koin.androidx.compose.get

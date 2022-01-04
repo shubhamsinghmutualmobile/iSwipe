@@ -17,7 +17,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import com.mutualmobile.iswipe.android.R
 import com.mutualmobile.iswipe.android.view.theme.YoutubePlayerTypography
-import com.mutualmobile.iswipe.android.viewmodels.YoutubeViewModel
+import com.mutualmobile.iswipe.viewmodels.YoutubeViewModel
 import org.koin.androidx.compose.get
 
 @Composable

@@ -32,8 +32,8 @@ import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import com.mutualmobile.iswipe.android.R
 import com.mutualmobile.iswipe.android.view.utils.isScrolledToEnd
-import com.mutualmobile.iswipe.android.viewmodels.YoutubeViewModel
 import com.mutualmobile.iswipe.data.states.ResponseState
+import com.mutualmobile.iswipe.viewmodels.YoutubeViewModel
 import kotlinx.coroutines.launch
 import org.koin.androidx.compose.get
 

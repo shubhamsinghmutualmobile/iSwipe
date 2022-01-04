@@ -1,4 +1,4 @@
-package com.mutualmobile.iswipe.android.viewmodels
+package com.mutualmobile.iswipe.viewmodels
 
 import android.util.Log
 import androidx.lifecycle.ViewModel
@@ -22,9 +22,8 @@ const val YOUTUBE_BASE_URL = "https://www.youtube.com/watch?v="
 const val YOUTUBE_CHANNEL_BASE_URL = "https://www.youtube.com/channel/"
 private const val TAG = "YoutubeViewModel"
 
-class YoutubeViewModel constructor(
-    private val youtubeApi: YoutubeAPI
-) : ViewModel() {
+actual class YoutubeViewModel actual constructor(private val youtubeApi: YoutubeAPI) : ViewModel() {
+
     private val _currentYoutubeResponse: MutableStateFlow<ResponseState<YoutubeTrendingVideosResponse>> = MutableStateFlow(ResponseState.Empty)
     val currentYoutubeResponse: StateFlow<ResponseState<YoutubeTrendingVideosResponse>> = _currentYoutubeResponse
 
@@ -50,11 +49,11 @@ class YoutubeViewModel constructor(
     val isMiniPlayerLoading: StateFlow<Boolean> = _isMiniPlayerLoading.asStateFlow()
 
     init {
-        getCurrentYoutubeResponse()
+        getCurrentYoutubeResponse(getNextPage = false)
         getStreamLinkFromYouTubeId()
     }
 
-    fun getCurrentYoutubeResponse(getNextPage: Boolean = false) {
+    actual fun getCurrentYoutubeResponse(getNextPage: Boolean) {
         try {
             viewModelScope.launch {
                 withContext(Dispatchers.IO) {
@@ -90,7 +89,7 @@ class YoutubeViewModel constructor(
         }
     }
 
-    private fun updateListOfYoutubeVideos() {
+    actual fun updateListOfYoutubeVideos() {
         try {
             viewModelScope.launch {
                 if (_currentYoutubeResponse.value is ResponseState.Success) {
@@ -110,9 +109,9 @@ class YoutubeViewModel constructor(
         }
     }
 
-    fun addNewItemsToList() = getCurrentYoutubeResponse(_currentYoutubeResponse.value is ResponseState.Success)
+    actual fun addNewItemsToList() = getCurrentYoutubeResponse(_currentYoutubeResponse.value is ResponseState.Success)
 
-    fun clearYoutubeList() {
+    actual fun clearYoutubeList() {
         try {
             viewModelScope.launch {
                 _listOfYoutubeVideos.emit(mutableListOf())
@@ -122,7 +121,7 @@ class YoutubeViewModel constructor(
         }
     }
 
-    fun toggleIsVideoPlaying(isVideoPlaying: Boolean) {
+    actual fun toggleIsVideoPlaying(isVideoPlaying: Boolean) {
         try {
             viewModelScope.launch {
                 withContext(Dispatchers.IO) {
@@ -134,7 +133,7 @@ class YoutubeViewModel constructor(
         }
     }
 
-    fun setIsCardExpanded(isCardExpanded: Boolean) {
+    actual fun setIsCardExpanded(isCardExpanded: Boolean) {
         try {
             viewModelScope.launch {
                 withContext(Dispatchers.IO) {
@@ -146,7 +145,7 @@ class YoutubeViewModel constructor(
         }
     }
 
-    fun toggleIsCardTouched(isCardTouched: Boolean) {
+    actual fun toggleIsCardTouched(isCardTouched: Boolean) {
         try {
             viewModelScope.launch {
                 withContext(Dispatchers.IO) {
@@ -158,7 +157,7 @@ class YoutubeViewModel constructor(
         }
     }
 
-    fun updateCurrentSelectedVideoItem(videoItem: Item?) {
+    actual fun updateCurrentSelectedVideoItem(videoItem: Item?) {
         try {
             viewModelScope.launch {
                 withContext(Dispatchers.IO) {
@@ -170,7 +169,7 @@ class YoutubeViewModel constructor(
         }
     }
 
-    private fun getStreamLinkFromYouTubeId() {
+    actual fun getStreamLinkFromYouTubeId() {
         try {
             viewModelScope.launch {
                 withContext(Dispatchers.IO) {
@@ -201,7 +200,7 @@ class YoutubeViewModel constructor(
         }
     }
 
-    fun setMiniPlayerLoading(isLoading: Boolean) {
+    actual fun setMiniPlayerLoading(isLoading: Boolean) {
         viewModelScope.launch(Dispatchers.IO) {
             _isMiniPlayerLoading.emit(isLoading)
         }

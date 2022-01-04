@@ -2,9 +2,9 @@ package com.mutualmobile.iswipe.android
 
 import android.app.Application
 import com.mutualmobile.iswipe.android.utils.DownloaderImpl
-import com.mutualmobile.iswipe.android.viewmodels.WeatherViewModel
-import com.mutualmobile.iswipe.android.viewmodels.YoutubeViewModel
 import com.mutualmobile.iswipe.data.di.network
+import com.mutualmobile.iswipe.viewmodels.WeatherViewModel
+import com.mutualmobile.iswipe.viewmodels.YoutubeViewModel
 import okhttp3.OkHttpClient
 import org.koin.android.ext.koin.androidContext
 import org.koin.android.ext.koin.androidLogger

@@ -81,11 +81,17 @@ object CommonMainDependencies {
 
 object AndroidMainVersions {
     const val ktor = CommonMainPluginVersions.ktor
+    const val appCompat = AndroidPluginVersions.appCompat
+    const val composeNavigation = AndroidPluginVersions.composeNavigation
+    const val newpipeYoutubeExtractor = AndroidPluginVersions.newpipeYoutubeExtractor
 }
 
 object AndroidMainDependencies {
     val implementations = listOf(
         "io.ktor:ktor-client-android:${AndroidMainVersions.ktor}",
+        "androidx.appcompat:appcompat:${AndroidMainVersions.appCompat}",
+        "androidx.lifecycle:lifecycle-viewmodel-compose:${AndroidMainVersions.composeNavigation}",
+        "com.github.TeamNewPipe:NewPipeExtractor:${AndroidMainVersions.newpipeYoutubeExtractor}",
     )
 }
 

@@ -1,4 +1,4 @@
-package com.mutualmobile.iswipe.android.viewmodels
+package com.mutualmobile.iswipe.viewmodels
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope

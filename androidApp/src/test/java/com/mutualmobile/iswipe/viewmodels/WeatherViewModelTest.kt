@@ -1,10 +1,10 @@
-package com.mutualmobile.iswipe.android.viewmodels
+package com.mutualmobile.iswipe.viewmodels
 
 import app.cash.turbine.test
 import com.mutualmobile.iswipe.android.utils.TestNetworkUtils
 import com.mutualmobile.iswipe.data.di.modules.NetworkModule
-import com.mutualmobile.iswipe.data.network.apis.YoutubeAPI
-import com.mutualmobile.iswipe.data.network.apis.YoutubeAPIImpl
+import com.mutualmobile.iswipe.data.network.apis.WeatherAPI
+import com.mutualmobile.iswipe.data.network.apis.WeatherAPIImpl
 import com.mutualmobile.iswipe.data.states.ResponseState
 import io.ktor.client.HttpClient
 import io.ktor.client.engine.mock.MockEngine
@@ -28,7 +28,7 @@ import org.koin.dsl.module
 import org.koin.test.KoinTest
 import org.koin.test.inject
 
-class YoutubeViewModelTest : KoinTest {
+class WeatherViewModelTest : KoinTest {
 
     // Because we don't have direct access to runBlocking in Unit Tests (ref. https://stackoverflow.com/questions/58303961)
     @OptIn(DelicateCoroutinesApi::class)
@@ -46,7 +46,7 @@ class YoutubeViewModelTest : KoinTest {
                             HttpClient(
                                 MockEngine {
                                     respond(
-                                        content = TestNetworkUtils.YOUTUBE_VIDEOS_RESPONSE_SUCCESS.trimIndent(),
+                                        content = TestNetworkUtils.WEATHER_RESPONSE_SUCCESS.trimIndent(),
                                         status = HttpStatusCode.OK,
                                         headers = headersOf(HttpHeaders.ContentType, "application/json")
                                     )
@@ -54,8 +54,8 @@ class YoutubeViewModelTest : KoinTest {
                             )
                         )
                     }
-                    single<YoutubeAPI> { YoutubeAPIImpl(networkModule = get()) }
-                    single { YoutubeViewModel(youtubeApi = get()) }
+                    single<WeatherAPI> { WeatherAPIImpl(networkModule = get()) }
+                    single { WeatherViewModel(weatherAPI = get()) }
                 }
             )
         }
@@ -68,16 +68,15 @@ class YoutubeViewModelTest : KoinTest {
     }
 
     @Test
-    fun getCurrentYoutubeResponseEmitsSuccessStateToFlow() {
-        val youtubeViewModel: YoutubeViewModel by inject()
+    fun getCurrentWeatherEmitsSuccessStateToFlow() {
+        val weatherViewModel: WeatherViewModel by inject()
         runBlocking {
             launch {
-                youtubeViewModel.currentYoutubeResponse.test {
-                    awaitItem() // Empty state
-                    awaitItem() // Loading state
+                weatherViewModel.currentWeather.test {
+                    awaitItem() // Because getCurrentWeather() will first emit Loading state
                     val result = awaitItem()
                     assert(result is ResponseState.Success)
-                    assert((result as ResponseState.Success).data.etag == "Wk9jiFfuS_n0gU6tPEvmyWtCrBQ")
+                    assert((result as ResponseState.Success).data.name == "Delhi")
                 }
             }
         }
