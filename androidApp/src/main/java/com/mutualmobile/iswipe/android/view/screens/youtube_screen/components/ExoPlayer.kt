@@ -41,7 +41,8 @@ import org.koin.androidx.compose.get
 @Composable
 fun ExoPlayer(
     youtubeViewModel: YoutubeViewModel = get(),
-    videoUrl: String
+    videoUrl: String,
+    onBack: () -> Unit
 ) {
     val isVideoPlaying by youtubeViewModel.isVideoPlaying.collectAsState()
     val isCardExpanded by youtubeViewModel.isCardExpanded.collectAsState()
@@ -113,7 +114,7 @@ fun ExoPlayer(
                                     }
                                 }
                             )
-                            PlayerControlStrip(exoPlayer)
+                            PlayerControlStrip(exoPlayer, onBack = onBack)
                         }
                         CollapsedPlayerTitleAndControls()
                     }

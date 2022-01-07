@@ -25,6 +25,7 @@ import com.google.accompanist.insets.LocalWindowInsets
 import com.google.accompanist.insets.rememberInsetsPaddingValues
 import com.mutualmobile.iswipe.android.view.screens.youtube_screen.YoutubeScreen
 import com.mutualmobile.iswipe.viewmodels.YoutubeViewModel
+import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
@@ -82,13 +83,19 @@ fun YoutubeMiniPlayer(
         elevation = 0.dp,
         indication = null
     ) {
-        BackHandler(onBack = {
-            coroutineScope.launch {
-                withContext(Dispatchers.IO) {
-                    swipeableState.animateTo(0, tween(durationMillis = YoutubeMiniPlayer.SWIPE_ANIMATION_DURATION))
-                }
-            }
-        })
-        ExoPlayer(videoUrl = videoStreamLink)
+        BackHandler(onBack = collapseYoutubePlayer(coroutineScope, swipeableState))
+        ExoPlayer(videoUrl = videoStreamLink, onBack = collapseYoutubePlayer(coroutineScope, swipeableState))
+    }
+}
+
+@ExperimentalMaterialApi
+private fun collapseYoutubePlayer(
+    coroutineScope: CoroutineScope,
+    swipeableState: SwipeableState<Int>
+): () -> Unit = {
+    coroutineScope.launch {
+        withContext(Dispatchers.IO) {
+            swipeableState.animateTo(0, tween(durationMillis = YoutubeMiniPlayer.SWIPE_ANIMATION_DURATION))
+        }
     }
 }

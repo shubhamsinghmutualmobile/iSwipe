@@ -350,7 +350,7 @@ object TestNetworkUtils {
       "id": 800,
       "main": "Clear",
       "description": "clear sky",
-      "icon": "01d"
+      "icon": "10d"
     }
   ],
   "base": "stations",
