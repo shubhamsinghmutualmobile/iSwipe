@@ -3,7 +3,7 @@
 ### Your one-stop for all needs!
 The goal of this Android app is to unify all the frequently used features like watching online videos 🎥, checking current weather 🌦, accessing file manager 🗂, browsing the internet 📱 (and many more), and make it readily accessible for you ✅
 
-> This app is a showcase for the real-life usage/working of the **Kotlin Multiplatform Mobile** framework
+> 🚧 This project is a work in progress. It tries to showcase how to use **Kotlin Mutliplatform Mobile** to architect apps in the **Kotlin Multiplatform Mobile** framework.
 
 ## Screenshots
 <img src="https://github.com/shubhamsinghmutualmobile/iSwipe/blob/master/readmeResources/sc_1.png" alt="alt text" width="300" height="600"> <img src="https://github.com/shubhamsinghmutualmobile/iSwipe/blob/master/readmeResources/sc_2.png" alt="alt text" width="300" height="600">
